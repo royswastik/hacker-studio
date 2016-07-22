@@ -1,8 +1,17 @@
 const electron = require('electron')
+const compiler= require('compilex')
+const glob = require('glob')
+const path = require('path')
+var compileXoption = {stats : true};
+compiler.init(compileXoption);
+
+
+
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
+const ipc = require('electron').ipcMain;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -16,7 +25,7 @@ function createWindow () {
   mainWindow.loadURL(`file://${__dirname}/index.html`)
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -26,6 +35,20 @@ function createWindow () {
     mainWindow = null
   })
 }
+
+
+function loadMainFiles () {
+  var files = glob.sync(path.join(__dirname, 'main-process/*.js'))
+  files.forEach(function (file) {
+    require(file)
+  })
+}
+function initialize () {
+	loadMainFiles();
+}
+
+initialize();
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -49,5 +72,8 @@ app.on('activate', function () {
   }
 })
 
+
+
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+

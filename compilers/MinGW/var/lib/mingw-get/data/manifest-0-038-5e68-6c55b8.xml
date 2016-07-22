@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<package id="manifest-0-038-5e68-6c55b8">
+    <release tarname="libstdc++-4.9.3-1-mingw32-dll-6.tar.xz" />
+    <references>
+        <sysroot id="sysroot-0-002-a7c6-d7dbb5" />
+    </references>
+    <manifest>
+        <file path="bin/libstdc++-6.dll" />
+    </manifest>
+</package>

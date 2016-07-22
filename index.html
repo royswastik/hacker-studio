@@ -1,4 +1,39 @@
-<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Compilex</title>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+
+
+    <link rel="import" href="sections/default.html">
+    <link rel="import" href="sections/problem.html">
+    <link rel="import" href="sections/all_questions.html">
+    <style>
+    #editor{
+      height:400px;
+    }
+    </style>
+</head>
+<body>
+
+<main class="main-content js-content"></main>
+
+ 
+<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
+<script>
+    // You can also require other files to run in this process
+    require('./renderer.js');
+    require('./assets/js/ace');
+    require('./assets/js/append-blocks');
+    require('./assets/js/bootstrap.min');
+  </script>
+   <script>
+    require('./assets/imports');
+  </script>
+</body>
+</html>
+<!-- <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8">
@@ -7,13 +42,15 @@
   <body>
     <h1>Hello World!</h1>
     <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using node <script>document.write(process.versions.node)</script>,
+    <!-- We are using node <script>document.write(process.versions.node)</script>,
     Chromium <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>.
   </body>
+ -->
 
+ <!--
   <script>
     // You can also require other files to run in this process
-    require('./renderer.js')
+    //require('./renderer.js')
   </script>
-</html>
+</html> -->
