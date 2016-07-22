@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>HackerStudio</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+                <div class="list-group" id="question-list">
+                    <a href="#" class="list-group-item active">
+                        <h4 class="list-group-item-heading">List group item heading</h4>
+                        <p class="list-group-item-text">...</p>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <div class="panel panel-default" style="margin-bottom:0">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-9">
+                                        <h4 class="list-group-item-heading" style="color:#2ec866;">Solve Me First</h4>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <h4 class="list-group-item-heading" style="text-align:right; padding-right:20px;">A B C</h4>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row" style="padding-top: 15px;">
+                                    <div class="col-xs-9" style="padding-top: 10px;">
+                                        <p>Success Rate: 98.10% Max Score: 1 Difficulty: Easy</p>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <button class="btn btn-default pull-right" style="margin-right:20px;color: #6e6e6e;font-size: 12pt;font-weight: 400;" type="submit">Solve</button>
+                                    </div>
+                                    
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                Basic panel example
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                Basic panel example
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/append-blocks.js"></script>
+
+    <script>
+        $(document).ready(function(){
+           var json = {
+               "1":{
+                   "name": "Solve me first"
+               },
+               "2":{
+                   "name": "Solve me second"
+               },
+               "3":{
+                   "name": "Solve me third"
+               }
+           };
+
+            function populateList(json){
+                for(var id in json){
+                    $("#question-list").append(getQuestionItem(json[id]["name"], id));
+                } 
+           }
+           populateList(json);
+
+           
+        });
+    </script>
+  </body>
+</html>
