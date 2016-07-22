@@ -4,8 +4,9 @@
 	<title>Compilex</title>
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 
-
-
+<!-- <script type="text/javascript" src="./assets/js/jquery.min.js"></script> -->
+    <script type="text/javascript" src="./assets/js/append-blocks.js"></script>
+ <!--   <script type="text/javascript" src="./ext-language_tools.js"></script>-->
     <link rel="import" href="sections/default.html">
     <link rel="import" href="sections/problem.html">
     <link rel="import" href="sections/all_questions.html">
@@ -19,14 +20,16 @@
 
 <main class="main-content js-content"></main>
 
- 
-<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
+
 <script>
     // You can also require other files to run in this process
     require('./renderer.js');
-    require('./assets/js/ace');
-    require('./assets/js/append-blocks');
-    require('./assets/js/bootstrap.min');
+   /* require('./assets/js/jquery.min.js');*/
+    var $ = jQuery = require("./assets/js/jquery.min.js");
+    require('./layouts/ace-build/ace.js');
+    require('./ext-language_tools.js');
+  /*  require('./assets/js/append-blocks.js');*/
+    require('./assets/js/bootstrap.min.js');
   </script>
    <script>
     require('./assets/imports');
