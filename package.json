@@ -26,6 +26,7 @@
     "electron-prebuilt": "^1.2.0"
   },
   "dependencies": {
+    "compilex": "^0.7.3",
     "form-serialize": "^0.7.1",
     "glob": "^7.0.5"
   }
