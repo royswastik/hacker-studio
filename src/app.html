@@ -23,66 +23,9 @@
     </style>
 </head>
 <body>
-
-  <div id="problem-list" class="container-fluid" style="display:none;">
-       <h1 id="app-name"></h1>
-        <!--<p class="subtitle">
-            Welcome to <a href="http://electron.atom.io" class="js-external-link">Electron</a> app running on this magnificent <strong id="platform-info"></strong> machine.
-        </p>-->
-        <p class="subtitle">
-            You are in <strong id="env-name"></strong> environment.
-        </p>
-        <div class="row">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-9">
-                <div class="list-group" id="question-list">
-                    <a href="#" class="list-group-item active">
-                        <h4 class="list-group-item-heading">List group item heading</h4>
-                        <p class="list-group-item-text">...</p>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <div class="panel panel-default" style="margin-bottom:0">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-xs-9">
-                                        <h4 class="list-group-item-heading" style="color:#2ec866;">Solve Me First</h4>
-                                    </div>
-                                    <div class="col-xs-3">
-                                        <h4 class="list-group-item-heading" style="text-align:right; padding-right:20px;">A B C</h4>
-                                    </div>
-                                    
-                                </div>
-                                <div class="row" style="padding-top: 15px;">
-                                    <div class="col-xs-9" style="padding-top: 10px;">
-                                        <p>Success Rate: 98.10% Max Score: 1 Difficulty: Easy</p>
-                                    </div>
-                                    <div class="col-xs-3">
-                                        <button class="btn btn-default pull-right" style="margin-right:20px;color: #6e6e6e;font-size: 12pt;font-weight: 400;" type="submit">Solve</button>
-                                    </div>
-                                    
-                                </div>
-                                
-                                
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                Basic panel example
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                Basic panel example
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
+<div id="page-container">Old Content</div>
+  <div id="problem-list" class="container-fluid">
+       
     </div>
 
 
@@ -92,35 +35,7 @@
 
 
     <div id="problem">
-        <div class="row">
-            <div class="col-sm-9">
-                <h5><strong>Problem Statement</strong></h5>
-                <p>Welcome to HackerRank! The purpose of this challenge is to familiarize you with reading input from stdin (the standard input stream) and writing output to stdout (the standard output stream) using our environment.
-
-Review the code provided in the editor below, then complete the solveMeFirst function so that it returns the sum of two integers read from stdin. Take some time to understand this code so you're prepared to write it yourself in future challenges.
-
-Select a language below, and start coding!</p>
-                <br />
-                <h5><strong>Input Format</strong></h5>
-                <p>Code that reads input from stdin is provided for you in the editor. There are  lines of input, and each line contains a single integer.</p>
-                <br />
-                <h5><strong>Output Format</strong></h5>
-                <p>Code that prints the sum calculated and returned by solveMeFirst is provided for you in the editor.</p>
-                <br />
-            </div>
-            <div class="col-sm-3"></div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <div id="editor-wrapper">
-                    <div id="editor">class Main{
-                        public static void main (String[] args) {
-                            System.out.println("Hello");
-                        }
-                    }</div>
-                </div>
-            </div>
-        </div>
+       
     </div>
 
 
@@ -133,9 +48,11 @@ Select a language below, and start coding!</p>
 
     <script>
         var $ = jQuery = require("./assets/js/jquery.min.js");
-        
+        var pager = require("./helpers/pager.js");
 
         $(document).ready(function(){
+            pager.loadPage("problem-list",$("#page-container"));
+            
            var json = {
                "1":{
                    "name": "Solve me first"

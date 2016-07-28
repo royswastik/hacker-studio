@@ -8,6 +8,7 @@ var jetpack = require('fs-jetpack'); // module loaded from npm
 var greet  = require('./hello_world/hello_world') ; // code authored by you in this project
 var env = require('./env');
 
+
 console.log('Loaded environment variables:', env);
 
 var app = remote.app;
@@ -18,12 +19,13 @@ var appDir = jetpack.cwd(app.getAppPath());
 console.log('The author of this app is:', appDir.read('package.json', 'json').author);
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('app-name').innerHTML = greet();
+
+  //  document.getElementById('app-name').innerHTML = greet();
   //  document.getElementById('platform-info').innerHTML = os.platform();
-    document.getElementById('env-name').innerHTML = env.name;
+  //  document.getElementById('env-name').innerHTML = env.name;
 
     // bind ace component to the editor div
-    initAce();
+   // initAce();
 });
 
 
