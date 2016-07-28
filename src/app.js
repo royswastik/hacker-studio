@@ -33,13 +33,14 @@ document.addEventListener('DOMContentLoaded', function () {
 /**
  * Binds the ace component to the editor div
  */
+var editor;
 function initAce() {
       var aceDir = './assets/js/ace-build'
          require(aceDir+'/ace.js');
 	     require(aceDir+'/ext-language_tools.js');
 
             ace.require("ace/ext/language_tools");
-            var editor = ace.edit("editor");
+            editor = ace.edit("editor");
             editor.setOptions({
                 enableBasicAutocompletion: true,
                  enableSnippets: true,

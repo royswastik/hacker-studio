@@ -26,7 +26,7 @@
 <div id="page-container">Old Content</div>
   <div id="problem-list" class="container-fluid">
        
-    </div>
+</div>
 
 
 
@@ -49,6 +49,7 @@
     <script>
         var $ = jQuery = require("./assets/js/jquery.min.js");
         var pager = require("./helpers/pager.js");
+        var renderer=require('./renderer.js');
 
         $(document).ready(function(){
             pager.loadPage("problem-list",$("#page-container"));

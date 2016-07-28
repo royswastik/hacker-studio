@@ -1,10 +1,9 @@
 
 const electron = require('electron');
-const compiler= require('compilex');
+const compiler=require('./helpers/compiler');
 const glob = require('glob');
 const path = require('path');
-var compileXoption = {stats : true};
-compiler.init(compileXoption);
+
 
 // Module to control application life.
 const app = electron.app;
@@ -84,7 +83,15 @@ app.on('activate', function () {
   }
 })
 
-
+ipc.on('send-code',function(event,data){
+  console.log(data);
+  var code=data.code;
+  var lang=data.lang;
+  compiler.compile(lang,code,function(data){
+    event.sender.send('recieve-code-output',{code_output:data});
+  });
+  
+});
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
