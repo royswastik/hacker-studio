@@ -6,7 +6,12 @@
             You are in <strong id="env-name"></strong> environment.
         </p>
         <div class="row">
-            <div class="col-sm-3"></div>
+            <div class="col-sm-3">
+                <div>
+                    <ul id="category-list" class="nav nav-pills nav-stacked">
+                    </ul>
+                </div>
+            </div>
             <div class="col-sm-9">
                 <div class="list-group" id="question-list">
                     <a href="#" class="list-group-item active">
@@ -59,7 +64,20 @@
 
 
 <script>
+ipcRenderer.on('categories-fetched-fs', function (event, input, output) {
+    //   const message = `The factorial of ${input} is ${output}`
+  //  invisReply.textContent = message;
+  //console.log(output);
+   var json = JSON.parse(output);
+   console.log(json);
+    $("#category-list").html(json);
+    for(var i = 0 ;i < json["categories"].length;i++){
+        console.log(json["categories"][i]["name"]);
+        $("#category-list").append('<li role="presentation" id="'+json["categories"][i]["id"]+'"><a href="#">'+json["categories"][i]["name"]+'</a></li>');
+    }
+});
 $(document).ready(function(){
+    fsHelper.getAllCategories();
     $("#solveBtn").click(function(){
         console.log("Solve btn clicked");
         pager.loadPage("problem",$("#page-container"));

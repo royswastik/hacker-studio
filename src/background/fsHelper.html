@@ -1,0 +1,25 @@
+<html>
+  <script type="text/javascript">
+    const ipc = require('electron').ipcRenderer;
+
+    const fs= require('fs');
+    const path=require('path');
+    const glob= require('glob');
+ //   const fs = require('fs');
+    const BrowserWindow = require('electron').remote.BrowserWindow;
+
+    ipc.on('get-categories-fs', function (event, number, fromWindowId) {
+        console.log("get categories fs");
+      const fromWindow = BrowserWindow.fromId(fromWindowId);
+      let meta_file=fs.readFileSync('./data/meta.json');
+	  let result =  meta_file.toString();
+      fromWindow.webContents.send('categories-fetched-fs', number, result);
+      window.close();
+    });
+
+    function factorial (num) {
+      if (num === 0) return 1;
+      return num * factorial(num - 1);
+    }
+  </script>
+</html>

@@ -49,6 +49,10 @@
     <script>
         var $ = jQuery = require("./assets/js/jquery.min.js");
         var pager = require("./helpers/pager.js");
+        var fsHelper = require("./helpers/fsHelper.js");
+        var ipcRenderer = require('electron').ipcRenderer;
+        var BrowserWindow = require('electron').remote.BrowserWindow;
+        var path = require("path");
 
         $(document).ready(function(){
             pager.loadPage("problem-list",$("#page-container"));
