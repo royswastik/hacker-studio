@@ -1,3 +1,14 @@
+ <style>
+     .code_output_div{
+         background:#f2f5fa;
+         border:1px solid #aaa;
+         border-radius:3px;
+         margin-top:15px;
+         padding:10px;
+         min-height:50px;
+
+     }
+ </style>
  <div class="row">
             <div class="col-sm-12">
                 <h4 class="back-btn" style="cursor:pointer;">Back</h4>
@@ -17,26 +28,62 @@ Select a language below, and start coding!</p>
                 <h5><strong>Output Format</strong></h5>
                 <p>Code that prints the sum calculated and returned by solveMeFirst is provided for you in the editor.</p>
                 <br />
+                
             </div>
             <div class="col-sm-3"></div>
         </div>
         <div class="row">
             <div class="col-xs-12">
                 <div id="editor-wrapper">
-                    <div id="editor">class Main{
-                        public static void main (String[] args) {
-                            System.out.println("Hello");
-                        }
-                    }</div>
+                    <div id="editor">print "Hello Hacker"</div>
                 </div>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-xs-12">
+                <select name="lang" id="lang_selecct_drop" class="form-control">
+                    <option value="C">C</option>
+                    <option value="C++">C++</option>
+                    <option value="Java">Java</option>  
+                    <option value="Python" selected>Python</option> 
+                    <option value="CS">C#</option>  
+                    <option value="VB">VB</option>  
+                </select>
+                <button class="btn btn-warning" id="compile_code_btn">Compile</button>
+            </div>
+            <div class="col-xs-12">
+                <div class="code_output_div">
+                        
+                </div>
+            </div>
+        </div>
 <script>
     $(document).ready(function(){
         initAce();
+        const ipc = require('electron').ipcRenderer;
+        ipc.on('recieve-code-output',function(event,data) {
+            console.log('output-from-code-recieved');
+            var code_output='';
+            if(!data.code_output.error){
+                code_output=data.code_output.output;
+                $('.code_output_div').html(code_output);
+            }
+            else{
+                code_output=data.code_output.error;
+                $('.code_output_div').html(code_output);
+            }            
+            
+            
+        });
+
         $(".back-btn").click(function(){
             pager.loadPage("problem-list", $("#page-container"));
+        });
+        $('#compile_code_btn').on('click','',function(){
+            var $code=editor.getValue();
+            var lang=$('#lang_selecct_drop').val();
+            // console.log($code);
+            ipc.send('send-code',{'code':$code,'lang':lang});
         });
     });
 </script>

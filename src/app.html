@@ -23,36 +23,18 @@
     </style>
 </head>
 <body>
-<div id="page-container">Old Content</div>
-  <div id="problem-list" class="container-fluid">
-       
-    </div>
-
-
-
-
-
-
-
-    <div id="problem">
-       
-    </div>
-
-
-
-
-
-
-
-
-
+<div id="page-container">Loading</div>
     <script>
         var $ = jQuery = require("./assets/js/jquery.min.js");
         var pager = require("./helpers/pager.js");
+
         var fsHelper = require("./helpers/fsHelper.js");
         var ipcRenderer = require('electron').ipcRenderer;
         var BrowserWindow = require('electron').remote.BrowserWindow;
         var path = require("path");
+
+
+        var ipc = require('electron').ipcRenderer;
 
         $(document).ready(function(){
             pager.loadPage("problem-list",$("#page-container"));
