@@ -11,7 +11,8 @@ module.exports = {
             const windowID = BrowserWindow.getFocusedWindow().id;
             this.window.parentWindowId = windowID;
              // const invisPath = 'file://' + path.join(__dirname, './background/fsHelper.html');
-            let invisPath = 'file:///home/swastik/dev/hs/hacker_studio/src/background/fsHelper.html';
+           // let invisPath = 'file:///home/swastik/dev/hs/hacker_studio/src/background/fsHelper.html';
+            let invisPath = 'file:///D:/workspace/desktop/hacker-studio/src/background/fsHelper.html';
             this.window.win = new BrowserWindow({ width: 400, height: 400, show: false });
             this.window.win.loadURL(invisPath);
             this.window.loading = true;
@@ -55,6 +56,7 @@ module.exports = {
     getAllCategories: function () {
         const windowID = this.window.parentWindowId;
         if(this.window.open == true){
+            const input = 100;
             this.window.win.webContents.send('get-categories-fs', input, windowID);
             return;
         }
