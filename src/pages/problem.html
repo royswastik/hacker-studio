@@ -11,10 +11,24 @@
  </style>
  <div class="row">
             <div class="col-sm-12">
-                <h4 class="back-btn" style="cursor:pointer;">Back</h4>
+                <div class="header-bar" style="background: whiteSmoke;display: block;width: 100%;height: 40px;">
+                    <div class="container">
+                        <div style="float:left;"><button class="back-btn btn btn-default" style="font-size: 11pt;cursor:pointer;margin-top: 2px;">Back</button></div>
+                        <button class="submit-code-btn btn btn-warning" style="float: right;    font-size: 11pt;cursor:pointer;margin-right: 70px;margin-top: 2px;">Submit</button>
+                        <button class="compile-code-btn btn btn-success" style="float: right;    font-size: 11pt;cursor:pointer;margin-right: 35px;margin-top: 2px;">Compile</button>
+                        <select style="float:right;margin-right: 30px;font-size: 12pt;margin-top: 8px;">
+                            <option>Python</option>
+                            <option>Java</option>
+                            <option>C++</option>
+                            <option>C</option>
+                        </select>
+                    </div>
+                    
+                </div>
             </div>
+       
         
-            <div class="col-sm-9">
+            <div class="col-sm-9" style="padding-left: 30px;">
                 <h3 class="problem-name"></h3>
                 <h5><strong>Problem Statement</strong></h5>
                 <p>Welcome to HackerRank! The purpose of this challenge is to familiarize you with reading input from stdin (the standard input stream) and writing output to stdout (the standard output stream) using our environment.
@@ -50,7 +64,7 @@ Select a language below, and start coding!</p>
                     <option value="CS">C#</option>  
                     <option value="VB">VB</option>  
                 </select>
-                <button class="btn btn-warning" id="compile_code_btn">Compile</button>
+                <button class="btn btn-warning compile-code-btn" id="compile_code_btn">Compile</button>
             </div>
             <div class="col-xs-12">
                 <div class="code_output_div">
@@ -59,13 +73,21 @@ Select a language below, and start coding!</p>
             </div>
         </div>
 <script>
-     ipcRenderer.on('problem-fetched', function (event, categoryId,result) {
-            console.log("Problem  Fetched for category "+categoryId+" and result");
-            console.log(result);
-            $(".problem-name").html(result["name"]);
-        });
+
+    /**
+     * Called when data about the problem is fetched
+     * The response contains name, id, test case names, problem statement, input format, output format, notes, etc.
+     */
+    ipcRenderer.on('problem-fetched', function (event, categoryId,result) {
+        console.log("Problem  Fetched for category "+categoryId+" and result");
+        console.log(result);
+        $(".problem-name").html(result["name"]);
+    });
+    ipcRenderer.on('case-evaluated', function (event,options, result) {
+        //
+    });
     $(document).ready(function(){
-        initAce();
+        initAce();//Initializing Ace Editor
         
         ipcRenderer.on('recieve-code-output',function(event,data) {
             console.log('output-from-code-recieved');
@@ -88,11 +110,20 @@ Select a language below, and start coding!</p>
         $(".back-btn").click(function(){
             pager.loadPage("problem-list", $("#page-container"));
         });
-        $('#compile_code_btn').on('click','',function(){
+
+        $('.compile-code-btn').on('click','',function(){
             var $code=editor.getValue();
             var lang=$('#lang_selecct_drop').val();
             // console.log($code);
             ipcRenderer.send('send-code',{'code':$code,'lang':lang});
+        });
+
+        $('.submit-code-btn').on('click','',function(){
+            var $code=editor.getValue();
+            var lang=$('#lang_selecct_drop').val();
+            var input = "";
+            // console.log($code);
+            ipcRenderer.send('make-submission',{'code':$code,'lang':lang,  'problemObj': {}});
         });
     });
 </script>

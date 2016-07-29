@@ -1,11 +1,13 @@
 <html>
   <script type="text/javascript">
+  /**
+   * This file is used as an invisible BrowserWindow to read from files in a separate process
+   * IPC Events are emitted from module fsHelper.js, which is used to read data and connect to this file
+   */
     const ipc = require('electron').ipcRenderer;
-
     const fs= require('fs');
     const path=require('path');
     const glob= require('glob');
- //   const fs = require('fs');
     const BrowserWindow = require('electron').remote.BrowserWindow;
 
     ipc.on('get-categories-fs', function (event, number, fromWindowId) {
@@ -14,7 +16,6 @@
           let meta_file=fs.readFileSync('./data/meta.json');
           let result =  meta_file.toString();
           fromWindow.webContents.send('categories-fetched-fs', number, result);
-       //   window.close();
     });
     
     ipc.on('get-problems-by-categoryId-fs', function (event, categoryId, fromWindowId) {
@@ -24,7 +25,6 @@
           let result =  meta_file.toString();
           result = JSON.parse(result);
           fromWindow.webContents.send('problem-list-fetched-fs', categoryId, result);
-       //   window.close();
     });
     
     ipc.on('get-problem-by-id-fs', function (event,problemId, categoryId, fromWindowId) {
@@ -32,7 +32,23 @@
           let meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/meta.json');
           let result =  meta_file.toString();
           result = JSON.parse(result);
-          fromWindow.webContents.send('problem-fetched', categoryId, result);
+          fromWindow.webContents.send('problem-fetched', categoryId, result);    
+    });
+
+    ipc.on('get-solution-by-name-fs', function (event,problemId, categoryId,solutionName, fromWindowId) {
+          const fromWindow = BrowserWindow.fromId(fromWindowId);
+          let meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+solutionName+'.in');
+          let input =  meta_file.toString();
+          meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+solutionName+'.out');
+          let output =  meta_file.toString();
+          let result = {
+            "problemId":problemId,
+            "categoryId": categoryId,
+            "solutionName": solutionName,
+            "input": input,
+            "output": output
+          };
+          fromWindow.webContents.send('solution-fetched',result);
           
     });
     
@@ -43,10 +59,5 @@
           window.close();
     });
     
-
-    function factorial (num) {
-      if (num === 0) return 1;
-      return num * factorial(num - 1);
-    }
   </script>
 </html>

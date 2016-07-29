@@ -1,8 +1,18 @@
+/**
+ * This module connects to the compilex and provide methods to compile code
+ * This module is not generally used by the main window(main renderer process), 
+ * instead preferably called from a background service(Invisible Browser Window)
+ */
+
 const compiler= require('compilex');
 var compileXoption = {stats : true};
 compiler.init(compileXoption);
 module.exports = {
     basePath: "",
+    compileSync: function (lang, code,input) {
+        //TODO code to compile synchronously
+        return compiledOutput;
+    },
     compile: function (lang, code,callback) {
         //by default we are keeping inputRadio=false for now.
         var inputRadio=false;

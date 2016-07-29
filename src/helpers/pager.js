@@ -1,3 +1,7 @@
+/**
+ * This module is used to change page in main window
+ */
+
 let jQuery = require("../assets/js/jquery.min.js");
 
 module.exports = {

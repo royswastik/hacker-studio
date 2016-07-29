@@ -1,3 +1,9 @@
+/**
+ * This module is used to connect to invisible BrowserWindow with html fsHelper.html which reads data from file system.
+ * To start the background service , open a new Session/or exisiting session by fsHelper.open().
+ * To stop the background service, call fsHelper.close()
+ */
+
 let win;
 module.exports = {
     window: {
@@ -88,6 +94,18 @@ module.exports = {
         this.window.win.webContents.on('did-finish-load', function () {
             const input = 100;
             winTemp.webContents.send('get-problem-by-id-fs', problemId, categoryId, windowID);
+        });
+    },
+    getSolutionByName: function (problemId, categoryId, solutionName){
+        const windowID = this.window.parentWindowId;
+        if(this.window.open == true){
+            this.window.win.webContents.send('get-solution-by-name-fs', problemId, categoryId,solutionName, windowID);
+            return;
+        }
+        let winTemp = this.window.win;
+        this.window.win.webContents.on('did-finish-load', function () {
+            const input = 100;
+            winTemp.webContents.send('get-solution-by-name-fs', problemId, categoryId, windowID);
         });
     },
     searchProblemsByName: function (text) {
