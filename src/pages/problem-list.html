@@ -14,50 +14,7 @@
             </div>
             <div class="col-sm-9">
                 <div class="list-group" id="question-list">
-                    <a href="#" class="list-group-item active">
-                        <h4 class="list-group-item-heading">List group item heading</h4>
-                        <p class="list-group-item-text">...</p>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <div class="panel panel-default" style="margin-bottom:0">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-xs-9">
-                                        <h4 class="list-group-item-heading" style="color:#2ec866;">Solve Me First</h4>
-                                    </div>
-                                    <div class="col-xs-3">
-                                        <h4 class="list-group-item-heading" style="text-align:right; padding-right:20px;">A B C</h4>
-                                    </div>
-                                    
-                                </div>
-                                <div class="row" style="padding-top: 15px;">
-                                    <div class="col-xs-9" style="padding-top: 10px;">
-                                        <p>Success Rate: 98.10% Max Score: 1 Difficulty: Easy</p>
-                                    </div>
-                                    <div class="col-xs-3">
-                                        <button id="solveBtn" class="btn btn-default pull-right" style="margin-right:20px;color: #6e6e6e;font-size: 12pt;font-weight: 400;" type="submit">Solve</button>
-                                    </div>
-                                    
-                                </div>
-                                
-                                
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                Basic panel example
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                Basic panel example
-                            </div>
-                        </div>
-                    </a>
+                    
                 </div>
             </div>
         </div>
@@ -67,21 +24,52 @@
 ipcRenderer.on('categories-fetched-fs', function (event, input, output) {
     //   const message = `The factorial of ${input} is ${output}`
   //  invisReply.textContent = message;
-  //console.log(output);
    var json = JSON.parse(output);
-   console.log(json);
     $("#category-list").html(json);
     for(var i = 0 ;i < json["categories"].length;i++){
-        console.log(json["categories"][i]["name"]);
-        $("#category-list").append('<li role="presentation" id="'+json["categories"][i]["id"]+'"><a href="#">'+json["categories"][i]["name"]+'</a></li>');
+        $("#category-list").append('<li role="presentation" class="category-item" id="'+json["categories"][i]["id"]+'"><a href="#">'+json["categories"][i]["name"]+'</a></li>');
     }
-});
-$(document).ready(function(){
-    fsHelper.getAllCategories();
-    $("#solveBtn").click(function(){
-        console.log("Solve btn clicked");
-        pager.loadPage("problem",$("#page-container"));
+    $(".category-item").click(function(){
+        $("#question-list").html("Loading");
+        var categoryId = $(this).attr("id");
+        fsHelper.open();
+        fsHelper.getProblemsByCategoryId(categoryId);
+        fsHelper.close();
     });
 });
+
+ipcRenderer.on('fs-helper-closed', function (event, fromWindowId) {
+   console.log("FS Helper Closed");
+});
+
+ipcRenderer.on('problem-list-fetched-fs', function (event, categoryId,result) {
+   console.log("Problem List Fetched for category "+categoryId+" and result");
+   console.log(result);
+   populateList(result["problem-list"]);
+   $(".solve-btn").click(function(){
+       var problemId = $(this).attr("data-problem-id");
+        pager.loadPage("problem",$("#page-container"), {"problemId": problemId, "categoryId": categoryId});
+    });
+
+});
+
+
+fsHelper.open();
+$(document).ready(function(){
+    fsHelper.getAllCategories();
+    fsHelper.getProblemsByCategoryId(1);
+});
+
+
+
+
+            function populateList(json){
+                $("#question-list").html("");
+                console.log(json);
+                for(var i =0; i< json.length; i++){
+                    $("#question-list").append(getQuestionItem(json[i]["name"], json[i]["id"]));
+                } 
+           }
+           
 
 </script>

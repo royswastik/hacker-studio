@@ -9,13 +9,40 @@
     const BrowserWindow = require('electron').remote.BrowserWindow;
 
     ipc.on('get-categories-fs', function (event, number, fromWindowId) {
-        console.log("get categories fs");
-      const fromWindow = BrowserWindow.fromId(fromWindowId);
-      let meta_file=fs.readFileSync('./data/meta.json');
-	  let result =  meta_file.toString();
-      fromWindow.webContents.send('categories-fetched-fs', number, result);
-      window.close();
+      console.log("get-categories-fs");
+          const fromWindow = BrowserWindow.fromId(fromWindowId);
+          let meta_file=fs.readFileSync('./data/meta.json');
+          let result =  meta_file.toString();
+          fromWindow.webContents.send('categories-fetched-fs', number, result);
+       //   window.close();
     });
+    
+    ipc.on('get-problems-by-categoryId-fs', function (event, categoryId, fromWindowId) {
+      console.log("get-categories-fs");
+          const fromWindow = BrowserWindow.fromId(fromWindowId);
+          let meta_file=fs.readFileSync('./data/'+categoryId+'/meta.json');
+          let result =  meta_file.toString();
+          result = JSON.parse(result);
+          fromWindow.webContents.send('problem-list-fetched-fs', categoryId, result);
+       //   window.close();
+    });
+    
+    ipc.on('get-problem-by-id-fs', function (event,problemId, categoryId, fromWindowId) {
+          const fromWindow = BrowserWindow.fromId(fromWindowId);
+          let meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/meta.json');
+          let result =  meta_file.toString();
+          result = JSON.parse(result);
+          fromWindow.webContents.send('problem-fetched', categoryId, result);
+          
+    });
+    
+    ipc.on('close-fs-helper', function (event,fromWindowId) {
+        console.log("Closing Window");
+          const fromWindow = BrowserWindow.fromId(fromWindowId);
+          fromWindow.webContents.send('fs-helper-closed', fromWindowId);
+          window.close();
+    });
+    
 
     function factorial (num) {
       if (num === 0) return 1;

@@ -15,6 +15,7 @@
             </div>
         
             <div class="col-sm-9">
+                <h3 class="problem-name"></h3>
                 <h5><strong>Problem Statement</strong></h5>
                 <p>Welcome to HackerRank! The purpose of this challenge is to familiarize you with reading input from stdin (the standard input stream) and writing output to stdout (the standard output stream) using our environment.
 
@@ -58,10 +59,15 @@ Select a language below, and start coding!</p>
             </div>
         </div>
 <script>
+     ipcRenderer.on('problem-fetched', function (event, categoryId,result) {
+            console.log("Problem  Fetched for category "+categoryId+" and result");
+            console.log(result);
+            $(".problem-name").html(result["name"]);
+        });
     $(document).ready(function(){
         initAce();
-        const ipc = require('electron').ipcRenderer;
-        ipc.on('recieve-code-output',function(event,data) {
+        
+        ipcRenderer.on('recieve-code-output',function(event,data) {
             console.log('output-from-code-recieved');
             var code_output='';
             if(!data.code_output.error){
@@ -75,6 +81,9 @@ Select a language below, and start coding!</p>
             
             
         });
+        
+        
+       
 
         $(".back-btn").click(function(){
             pager.loadPage("problem-list", $("#page-container"));
@@ -83,7 +92,7 @@ Select a language below, and start coding!</p>
             var $code=editor.getValue();
             var lang=$('#lang_selecct_drop').val();
             // console.log($code);
-            ipc.send('send-code',{'code':$code,'lang':lang});
+            ipcRenderer.send('send-code',{'code':$code,'lang':lang});
         });
     });
 </script>
