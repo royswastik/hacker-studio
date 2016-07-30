@@ -8,70 +8,113 @@
          min-height:50px;
 
      }
+     #editor{
+      height:700px;
+    }
+    .test-cases > ul > li[data-status="solved"]{
+        color:green;
+    }
+    .test-cases > ul > li[data-status="error"]{
+        color:red;
+    }
+    .test-cases > ul > li[data-status="tle"]{
+        color:orange;
+    }
  </style>
- <div class="row">
+
+ <div class="row" style="padding-top:40px;">
             <div class="col-sm-12">
-                <div class="header-bar" style="background: whiteSmoke;display: block;width: 100%;height: 40px;">
-                    <div class="container">
+                <div class="header-bar" style="background: whiteSmoke;display: block;width: 100%;height: 40px;position:fixed;top:0px;z-index:50;">
+                   
                         <div style="float:left;"><button class="back-btn btn btn-default" style="font-size: 11pt;cursor:pointer;margin-top: 2px;">Back</button></div>
+                        <div style="float:left;"><button class="show-problem-desc-btn btn btn-default" style="font-size: 11pt;cursor:pointer;margin-top: 2px;">Back</button></div>
+                        <div style="float:left;"><button class="show-evaluation-btn btn btn-default" style="font-size: 11pt;cursor:pointer;margin-top: 2px;">Back</button></div>
+                        <div style="float:left;"><button class="show-input-output-btn btn btn-default" style="font-size: 11pt;cursor:pointer;margin-top: 2px;">Back</button></div>
+                        
+                        
                         <button class="submit-code-btn btn btn-warning" style="float: right;    font-size: 11pt;cursor:pointer;margin-right: 70px;margin-top: 2px;">Submit</button>
                         <button class="compile-code-btn btn btn-success" style="float: right;    font-size: 11pt;cursor:pointer;margin-right: 35px;margin-top: 2px;">Compile</button>
-                        <select style="float:right;margin-right: 30px;font-size: 12pt;margin-top: 8px;">
-                            <option>Python</option>
-                            <option>Java</option>
-                            <option>C++</option>
-                            <option>C</option>
+                        <select  name="lang" id="lang-select-drop" style="float:right;margin-right: 30px;font-size: 12pt;margin-top: 8px;">
+                            <option value="C">C</option>
+                            <option value="C++">C++</option>
+                            <option value="Java">Java</option>  
+                            <option value="Python" selected>Python</option> 
+                            <option value="CS">C#</option>  
+                            <option value="VB">VB</option>
                         </select>
-                    </div>
+                    
                     
                 </div>
             </div>
        
-        
-            <div class="col-sm-9" style="padding-left: 30px;">
-                <h3 class="problem-name"></h3>
-                <h5><strong>Problem Statement</strong></h5>
-                <p>Welcome to HackerRank! The purpose of this challenge is to familiarize you with reading input from stdin (the standard input stream) and writing output to stdout (the standard output stream) using our environment.
+            <div class="col-xs-12">
+                    <div  style="padding-left: 30px; overflow-y:hidden; overflow-x:hidden;float:left;width:300px;" class="ui-widget-content" id="sidePanel">
+                        <div style=" overflow-y:scroll; height: 100%;" data-active-section="">
+                            <div class="problem-description">
+                                <h3 class="problem-name"></h3>
+                                <h5><strong>Problem Statement</strong></h5>
+                                <p>Welcome to HackerRank! The purpose of this challenge is to familiarize you with reading input from stdin (the standard input stream) and writing output to stdout (the standard output stream) using our environment.
 
-Review the code provided in the editor below, then complete the solveMeFirst function so that it returns the sum of two integers read from stdin. Take some time to understand this code so you're prepared to write it yourself in future challenges.
+                Review the code provided in the editor below, then complete the solveMeFirst function so that it returns the sum of two integers read from stdin. Take some time to understand this code so you're prepared to write it yourself in future challenges.
 
-Select a language below, and start coding!</p>
-                <br />
-                <h5><strong>Input Format</strong></h5>
-                <p>Code that reads input from stdin is provided for you in the editor. There are  lines of input, and each line contains a single integer.</p>
-                <br />
-                <h5><strong>Output Format</strong></h5>
-                <p>Code that prints the sum calculated and returned by solveMeFirst is provided for you in the editor.</p>
-                <br />
-                
-            </div>
-            <div class="col-sm-3"></div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <div id="editor-wrapper">
-                    <div id="editor">print "Hello Hacker"</div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <select name="lang" id="lang_selecct_drop" class="form-control">
-                    <option value="C">C</option>
-                    <option value="C++">C++</option>
-                    <option value="Java">Java</option>  
-                    <option value="Python" selected>Python</option> 
-                    <option value="CS">C#</option>  
-                    <option value="VB">VB</option>  
-                </select>
-                <button class="btn btn-warning compile-code-btn" id="compile_code_btn">Compile</button>
-            </div>
-            <div class="col-xs-12">
-                <div class="code_output_div">
+                Select a language below, and start coding!</p>
+                                <br />
+                                <h5><strong>Input Format</strong></h5>
+                                <p>Code that reads input from stdin is provided for you in the editor. There are  lines of input, and each line contains a single integer.</p>
+                                <br />
+                                <h5><strong>Output Format</strong></h5>
+                                <p>Code that prints the sum calculated and returned by solveMeFirst is provided for you in the editor.</p>
+                                <br />
+                                
+                                
+                            </div>
+                            <div class="evaluation">
+                                <div class="evaluation-status"></div>
+                                <div class="code-evaluation-output">
+
+                                </div>
+                                <div class="test-cases">
+                                    <ul>
+                                        <li data-status="unsolved">
+                                            Test Case 1. Status: Unsolved <br />
+                                            <span></span>
+                                        </li>
+                                        <li data-status="solved">
+                                            Test Case 1. Status: Unsolved <br />
+                                            <span></span>
+                                        </li>
+                                        <li data-status="error">
+                                            Test Case 1. Status: Unsolved <br />
+                                            <span></span>
+                                        </li>
+                                        <li data-status="tle">
+                                            Test Case 1. Status: Unsolved <br />
+                                            <span></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="code-input-output">
+                                <h6>Output</h6>
+                                <div class="code_output_div">
+                                </div>
+                            </div>
+                            
+                        </div>
                         
-                </div>
+                    </div>
+                    <div style="padding-left:0;overflow:hidden;">
+                            
+                            <div id="editor-wrapper">
+                                <div id="editor">print "Hello Hacker"</div>
+                            </div>
+                                
+                        </div>
+                    
             </div>
+            
         </div>
+      
 <script>
 
     /**
@@ -86,9 +129,24 @@ Select a language below, and start coding!</p>
     ipcRenderer.on('case-evaluated', function (event,options, result) {
         //
     });
+    
+$(window).resize(function(){
+    $("#editor").height($(window).height()-40);
+    $("#sidePanel").height($(window).height()-40);
+});
+
     $(document).ready(function(){
         initAce();//Initializing Ace Editor
-        
+        $("#editor").height($(window).height()-40);
+        $("#sidePanel").height($(window).height()-40);
+
+        $("#sidePanel").resizable({
+            containment: "parent",
+            handles: "e",
+            minWidth: 150,
+            maxWidth: 1000
+        });
+      //  $('.code_output_div').resizable();
         ipcRenderer.on('recieve-code-output',function(event,data) {
             console.log('output-from-code-recieved');
             var code_output='';
@@ -110,17 +168,31 @@ Select a language below, and start coding!</p>
         $(".back-btn").click(function(){
             pager.loadPage("problem-list", $("#page-container"));
         });
+        $(".show-problem-desc-btn").click(function(){
+            $elem = $("div[data-active-section]");
+            $elem.attr("data-active-section", "problem-desc");
+        });
+        $(".show-evaluation-btn").click(function(){
+            $elem = $("div[data-active-section]");
+            $elem.attr("data-active-section", "evaluation");
+        });
+        $(".show-input-output-btn").click(function(){
+            $elem = $("div[data-active-section]");
+            $elem.attr("data-active-section", "input-output");
+        });
 
         $('.compile-code-btn').on('click','',function(){
             var $code=editor.getValue();
-            var lang=$('#lang_selecct_drop').val();
+            var lang=$('#lang-select-drop').val();
+            var input = '';
+            var inputRadio = false;
             // console.log($code);
-            ipcRenderer.send('send-code',{'code':$code,'lang':lang});
+            ipcRenderer.send('send-code',{'code':$code,'lang':lang, 'input': input, 'inputRadio': inputRadio});
         });
 
         $('.submit-code-btn').on('click','',function(){
             var $code=editor.getValue();
-            var lang=$('#lang_selecct_drop').val();
+            var lang=$('#lang-select-drop').val();
             var input = "";
             // console.log($code);
             ipcRenderer.send('make-submission',{'code':$code,'lang':lang,  'problemObj': {}});

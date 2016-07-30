@@ -46,6 +46,10 @@ function initAce() {
                  enableSnippets: true,
                enableLiveAutocompletion: false
              });
+             var session = editor.getSession();
+             session.setUseWrapMode(true);
+              editor.setShowPrintMargin(false);
+              editor.setBehavioursEnabled(true);
              editor.setOption("showPrintMargin", false);
             editor.setTheme("ace/theme/monokai");
              editor.getSession().setMode("ace/mode/java");

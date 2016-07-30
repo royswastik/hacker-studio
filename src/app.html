@@ -5,8 +5,10 @@
     <title>HackerStudio</title>
 
       <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+      <link href="assets/css/jquery-ui.css" rel="stylesheet">
 
  <script type="text/javascript" src="./assets/js/jquery.min.js"></script>
+ 
     <script type="text/javascript" src="assets/js/append-blocks.js"></script>
 
     <link href="stylesheets/main.css" rel="stylesheet" type="text/css">
@@ -15,17 +17,18 @@
     <!--<script src="helpers/external_links.js"></script>-->
 
     <script src="app.js"></script>
-
     <style>
-    #editor{
-      height:700px;
-    }
+        body{
+            overflow: hidden;
+        }
     </style>
+    
 </head>
 <body>
 <div id="page-container">Loading</div>
     <script>
         var $ = jQuery = require("./assets/js/jquery.min.js");
+        require("./assets/js/jquery-ui.js");
         var pager = require("./helpers/pager.js");
 
         var fsHelper = require("./helpers/fsHelper.js");
@@ -60,5 +63,6 @@
 
         });
     </script>
+    <script type="text/javascript" src="./assets/js/jquery-ui.js"></script>
 </body>
 </html>

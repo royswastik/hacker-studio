@@ -87,7 +87,9 @@ ipc.on('send-code',function(event,data){
   console.log(data);
   var code=data.code;
   var lang=data.lang;
-  compiler.compile(lang,code,function(data){
+  var input = data.input;
+  var inputRadio = data.inputRadio;
+  compiler.compile(lang,code,inputRadio,input,function(data){
     event.sender.send('recieve-code-output',{code_output:data});
   });
   

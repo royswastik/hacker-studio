@@ -1,20 +1,15 @@
-/**
- * This module connects to the compilex and provide methods to compile code
- * This module is not generally used by the main window(main renderer process), 
- * instead preferably called from a background service(Invisible Browser Window)
- */
-
 const compiler= require('compilex');
 var compileXoption = {stats : true};
 compiler.init(compileXoption);
 module.exports = {
     basePath: "",
-    compileSync: function (lang, code,input) {
-        //TODO code to compile synchronously
-        return compiledOutput;
+    compileSync: function (params) {
+        
     },
-    compile: function (lang, code,callback) {
+    compile: function (lang, code, inputRadio, input,callback) {
         //by default we are keeping inputRadio=false for now.
+        console.log("Callback function");
+        console.log(callback);
         var inputRadio=false;
         var input='';
         if((lang === "C") || (lang === "C++"))
@@ -76,8 +71,8 @@ module.exports = {
                 console.log(code);
                 compiler.compileJavaWithInput( envData , code , input ,  function(data){
                     var send_data = data
-    console.log(send_data);
-    callback(send_data);
+                    console.log(send_data);
+                    callback(send_data);
                 });
 
             }
@@ -111,8 +106,8 @@ module.exports = {
                 var envData = { OS : "windows"};
                 compiler.compileCSWithInput(envData , code , input , function(data){
                     var send_data = data
-    console.log(send_data);
-    callback(send_data);
+                    console.log(send_data);
+                    callback(send_data);
                 });            
             }
             else
@@ -120,8 +115,8 @@ module.exports = {
                 var envData = { OS : "windows"};
                 compiler.compileCS(envData , code , function(data){
                     var send_data = data
-    console.log(send_data);
-    callback(send_data);
+                    console.log(send_data);
+                    callback(send_data);
                 });
             }
 
