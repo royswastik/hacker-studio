@@ -89,11 +89,12 @@
                             </div>
                             <div class="evaluation  sidePanel-section">
                                 <div class="evaluation-status"></div>
+                                <p style="text-align:center;" class="evaluating">Evaluating</p>
                                 <div class="code-evaluation-output">
 
                                 </div>
                                 <div class="test-cases">
-                                    <ul>
+                                    <ul style="padding-left:0;">
                                         <li id="case-1" data-status="unsolved">
                                             Test Case 1. Status: Unsolved <br />
                                             <span></span>
@@ -118,6 +119,7 @@
                                 </div>
                             </div>
                             <div class="code-input-output  sidePanel-section">
+                                
                                 <h6 class="code-input-div">
                                     <textarea id="code-input" class="form-control"></textarea>
                                 </h6>
@@ -166,9 +168,9 @@
         if(result["test-cases"] && result["test-cases"].length > 0){
             for(var i=0; i < result["test-cases"].length;i++){
                 $(".test-cases > ul").append('\
-                    <li id="case-'+result["test-cases"][i]+'" data-status="unsolved">\
-                                                Test Case '+i+'. Status: Unsolved <br />\
-                                                <span></span>\
+                    <li style="margin-bottom:10px;display:block;" id="case-'+result["test-cases"][i]+'" data-status="unsolved">\
+                                                Test Case '+i+'. Status:<br />\
+                                                <span>unsolved</span>\
                                             </li>\
                 ');
             }
@@ -198,7 +200,7 @@ $(window).resize(function(){
             minWidth: 150,
             maxWidth: 1000
         });
-
+        $('.evaluating').hide();
         $(".section-show-btn").click(function(){
             $("#sidepanel-section-wrapper").attr("data-active-section",$(this).attr("data-show") );
         });
@@ -258,19 +260,23 @@ $(window).resize(function(){
              // const invisPath = 'file://' + path.join(__dirname, './background/fsHelper.html');
            // let invisPath = 'file:///home/swastik/dev/hs/hacker_studio/src/background/fsHelper.html';
             let invisPath = 'file:///D:/workspace/desktop/hacker-studio/src/background/evaluator.html';
-            let win = new BrowserWindow({ width: 400, height: 400, show: true });
+            let win = new BrowserWindow({ width: 400, height: 400, show: false });
             win.loadURL(invisPath);
             win.webContents.on('did-finish-load', function () {
                 win.webContents.send('make-submission', {'code':$code,'lang':lang, 'input':input,  'problemObj': problemObj}, windowID);
                 console.log("Evaluation Service Started");
             });
+            $('.evaluating').show();
         });
 
         ipcRenderer.on('made-submission',function(event,options,evaluation_result) {
+            $('.evaluating').hide();
             console.log('Evaluation completed');
             console.log(evaluation_result);
-            for(var testCase in evaluation_result["case-results"]){
-                $("#case-"+testCase).attr("data-status", evaluation_result["case-results"][testCase]["status"]);
+            for(var testCase =0 ;testCase< evaluation_result["case-results"].length; testCase++){
+                console.log("#case-"+evaluation_result["case-results"][testCase]["testCase"]+" > span");
+                $("#case-"+evaluation_result["case-results"][testCase]["testCase"]+" > span").text(evaluation_result["case-results"][testCase]["status"]);
+                $("#case-"+evaluation_result["case-results"][testCase]["testCase"]).attr("data-status", evaluation_result["case-results"][testCase]["status"]);
             }
             var code_output='';
             // if(!evaluation_result.code_output.error){

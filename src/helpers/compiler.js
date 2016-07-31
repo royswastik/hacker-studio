@@ -8,14 +8,14 @@ module.exports = {
         let code = inputObj["code"];
         let lang  = inputObj["lang"];
         let inputRadio  = inputObj["inputRadio"];
-        let input  = inputObj["input"];
+        let input0  = inputObj["input"];
+        const input = input0;
         let testCase = inputObj["testCase"];
          console.log("Input"+input);
-         console.log("inputRadio"+inputRadio);
-         console.log("code"+code);
-         console.log("lang"+lang);
-        console.log("Callback function");
-        console.log(callback);
+         console.log("Test case"+testCase);
+
+        // console.log("Callback function");
+        // console.log(callback);
         if((lang === "C") || (lang === "C++"))
         {        
             console.log("Compiling C, C++");
@@ -69,6 +69,7 @@ module.exports = {
                 compiler.compileJavaWithInput( envData , code , function(data){
                     var send_data = data
                     inputObj["output"] = send_data;
+                    console.log(inputObj);
                     callback(inputObj);
                 });
             }
@@ -76,10 +77,13 @@ module.exports = {
             {
                 var envData = { OS : "windows" };     
                 console.log(code);
-                compiler.compileJavaWithInput( envData , code , input ,  function(data){
-                    var send_data = data
-                    console.log(send_data);
-                    inputObj["output"] = send_data;
+                let inputL = input;
+                console.log("Input: "+inputL);
+                compiler.compileJavaWithInput( envData , code , inputL ,  function(data){
+                    let send_data = data
+                    
+                    inputObj["output"] = data;
+                    console.log(inputObj);
                     callback(inputObj);
                 });
 
@@ -87,7 +91,8 @@ module.exports = {
 
         }
         if( lang === "Python")
-        {   console.log('I am python')
+        {   
+            console.log('Compiling python')
             if(inputRadio === "true")
             {
                 var envData = { OS : "windows"};
