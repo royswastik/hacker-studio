@@ -53,6 +53,4 @@ function initAce() {
              editor.setOption("showPrintMargin", false);
             editor.setTheme("ace/theme/monokai");
              editor.getSession().setMode("ace/mode/java");
-
-    
 }
