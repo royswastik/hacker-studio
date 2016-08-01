@@ -11,8 +11,9 @@
     console.log(ev.dataTransfer.files[0].path)
     ev.preventDefault()
     }
+    
     $(document).ready(function(){
-        let importCount = 0;
+        
         let focusedId=BrowserWindow.getFocusedWindow().id;
         dragDrop('#dropTarget', {
             onDrop: function (files, pos) {
@@ -60,8 +61,10 @@
         });
     });
 
+    var importCount = 0;
     ipcRenderer.on('problem-imported', function (event,filepath, jsonObj) {
         console.log(filepath);
+        importCount++;
         console.log("Imported "+importCount+" problems");
     });
 
