@@ -11,12 +11,14 @@
     "electron-prebuilt": "^1.2.0"
   },
   "dependencies": {
+    "brace": "^0.7.0",
     "compilex": "^0.7.3",
-    "fs-jetpack": "^0.9.0",
+    "crypto-js": "^3.1.6",
+    "drag-drop": "^2.11.0",
     "form-serialize": "^0.7.1",
+    "fs-jetpack": "^0.9.0",
     "glob": "^7.0.5",
-    "rollup": "^0.26.3",
-    "brace": "^0.7.0"
+    "rollup": "^0.26.3"
   },
   "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
   "osx": {

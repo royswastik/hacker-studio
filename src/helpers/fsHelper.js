@@ -109,6 +109,30 @@ module.exports = {
         });
     },
     searchProblemsByName: function (text) {
-        
-    }
+    } 
+    // ,
+    // getContentFromFile: function(filePath){
+    //     const windowID = this.window.parentWindowId;
+    //     if(this.window.open == true){
+    //         this.window.win.webContents.send('get-content-from-file-fs', filePath, windowID);
+    //         return;
+    //     }
+    //     let winTemp = this.window.win;
+    //     this.window.win.webContents.on('did-finish-load', function () {
+    //         const input = 100;
+    //         winTemp.webContents.send('get-content-from-file-fs', filePath, windowID);
+    //     });
+    // },
+    // writeContentToFile: function(content, filePath){
+    //     const windowID = this.window.parentWindowId;
+    //     if(this.window.open == true){
+    //         this.window.win.webContents.send('write-content-to-file-fs',content, filePath, windowID);
+    //         return;
+    //     }
+    //     let winTemp = this.window.win;
+    //     this.window.win.webContents.on('did-finish-load', function () {
+    //         const input = 100;
+    //         winTemp.webContents.send('write-content-to-file-fs',content, filePath, windowID);
+    //     });
+    // }
 }

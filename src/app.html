@@ -32,10 +32,12 @@
         var pager = require("./helpers/pager.js");
 
         var fsHelper = require("./helpers/fsHelper.js");
+        var problemImporter = require("./helpers/importer.js");
         var ipcRenderer = require('electron').ipcRenderer;
         var BrowserWindow = require('electron').remote.BrowserWindow;
         var path = require("path");
-
+        var dragDrop = require('drag-drop');
+        
 
         var ipc = require('electron').ipcRenderer;
 

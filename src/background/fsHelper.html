@@ -51,6 +51,38 @@
           fromWindow.webContents.send('solution-fetched',result);
           
     });
+
+    ipc.on('get-content-from-file-fs', function (event,filePath, fromWindowId) {
+          const fromWindow = BrowserWindow.fromId(fromWindowId);
+          let meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+solutionName+'.in');
+          let input =  meta_file.toString();
+          meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+solutionName+'.out');
+          let output =  meta_file.toString();
+          let result = {
+            "problemId":problemId,
+            "categoryId": categoryId,
+            "solutionName": solutionName,
+            "input": input,
+            "output": output
+          };
+          fromWindow.webContents.send('content-from-file-fetched',result);
+    });
+
+    ipc.on('write-content-to-file-fs', function (event,content, filePath, fromWindowId) {
+          const fromWindow = BrowserWindow.fromId(fromWindowId);
+          let meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+solutionName+'.in');
+          let input =  meta_file.toString();
+          meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+solutionName+'.out');
+          let output =  meta_file.toString();
+          let result = {
+            "problemId":problemId,
+            "categoryId": categoryId,
+            "solutionName": solutionName,
+            "input": input,
+            "output": output
+          };
+          fromWindow.webContents.send('content-to-file-written',result);
+    });
     
     ipc.on('close-fs-helper', function (event,fromWindowId) {
         console.log("Closing Window");

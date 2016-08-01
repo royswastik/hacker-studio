@@ -1,4 +1,5 @@
 <h1 id="app-name"></h1>
+<button class="show-importer">Show Importer</button>
         <!--<p class="subtitle">
             Welcome to <a href="http://electron.atom.io" class="js-external-link">Electron</a> app running on this magnificent <strong id="platform-info"></strong> machine.
         </p>-->
@@ -64,6 +65,10 @@ fsHelper.open();
 $(document).ready(function(){
     fsHelper.getAllCategories();
     fsHelper.getProblemsByCategoryId(1);
+
+    $(".show-importer").click(function(){
+        pager.loadPage("importer",$("#page-container"),{});
+    });
 });
 
 
