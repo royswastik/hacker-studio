@@ -66,6 +66,10 @@
            populateList(json);
 
         });
+
+        ipcRenderer.on('workspace-error', function (event,message) {
+            alert(message);
+        });
     </script>
     <script type="text/javascript" src="./assets/js/jquery-ui.js"></script>
 </body>

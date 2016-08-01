@@ -18,7 +18,8 @@ module.exports = {
             this.window.parentWindowId = windowID;
              // const invisPath = 'file://' + path.join(__dirname, './background/fsHelper.html');
            // let invisPath = 'file:///home/swastik/dev/hs/hacker_studio/src/background/fsHelper.html';
-            let invisPath = 'file:///D:/workspace/desktop/hacker-studio/src/background/fsHelper.html';
+           let invisPath= 'file://' + path.join(__dirname, '../background/fsHelper.html');
+        //    let invisPath = 'file:///D:/workspace/desktop/hacker-studio/src/background/fsHelper.html';
             this.window.win = new BrowserWindow({ width: 400, height: 400, show: false });
             this.window.win.loadURL(invisPath);
             this.window.loading = true;

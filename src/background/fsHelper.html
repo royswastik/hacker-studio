@@ -9,37 +9,78 @@
     const path=require('path');
     const glob= require('glob');
     const BrowserWindow = require('electron').remote.BrowserWindow;
+    const Config = require('electron-config');
+    const config = new Config();
+    let workspaceDir = config.get("activeWorkspace");
+
+    function isWorkspaceValid(workspaceDirec,fromWindowId){
+      const fromWindow = BrowserWindow.fromId(fromWindowId);
+        if((!config.has('activeWorkspace')) || config.get("activeWorkspace") == null){
+              //workspace not set
+              fromWindow.webContents.send('workspace-error', "Active workspace is not set. Set a workspace directory");
+              return false;
+          }
+          let workSpaceDir = config.get("activeWorkspace");
+          try{
+              if(!fs.statSync(workSpaceDir).isDirectory()){
+                  //not a directory
+                  fromWindow.webContents.send('workspace-error', "Active workspace value is not a valid directory");
+                  return false;
+              }
+          }catch(e){
+              //Unable to access workspace directory
+              fromWindow.webContents.send('workspace-error', "Active workspace can not be accessed");
+              return false;
+          }
+          return true;
+    }
 
     ipc.on('get-categories-fs', function (event, number, fromWindowId) {
       console.log("get-categories-fs");
+      if(!isWorkspaceValid(workspaceDir,fromWindowId)){
+         window.close();
+          return;
+      }
           const fromWindow = BrowserWindow.fromId(fromWindowId);
-          let meta_file=fs.readFileSync('./data/meta.json');
+          let meta_file=fs.readFileSync(path.join(workspaceDir,'/meta.json'));
           let result =  meta_file.toString();
           fromWindow.webContents.send('categories-fetched-fs', number, result);
     });
     
     ipc.on('get-problems-by-categoryId-fs', function (event, categoryId, fromWindowId) {
+      if(!isWorkspaceValid(workspaceDir,fromWindowId)){
+          window.close();
+          return;
+      }
       console.log("get-categories-fs");
           const fromWindow = BrowserWindow.fromId(fromWindowId);
-          let meta_file=fs.readFileSync('./data/'+categoryId+'/meta.json');
+          let meta_file=fs.readFileSync(path.join(workspaceDir,categoryId+'/meta.json'));
           let result =  meta_file.toString();
           result = JSON.parse(result);
           fromWindow.webContents.send('problem-list-fetched-fs', categoryId, result);
     });
     
     ipc.on('get-problem-by-id-fs', function (event,problemId, categoryId, fromWindowId) {
+      if(!isWorkspaceValid(workspaceDir,fromWindowId)){
+          window.close();
+          return;
+      }
           const fromWindow = BrowserWindow.fromId(fromWindowId);
-          let meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/meta.json');
+          let meta_file=fs.readFileSync(path.join(workspaceDir,categoryId+'/'+problemId+'/meta.json'));
           let result =  meta_file.toString();
           result = JSON.parse(result);
           fromWindow.webContents.send('problem-fetched', categoryId, result);    
     });
 
     ipc.on('get-solution-by-name-fs', function (event,problemId, categoryId,solutionName, fromWindowId) {
+      if(!isWorkspaceValid(workspaceDir,fromWindowId)){
+          window.close();
+          return;
+      }
           const fromWindow = BrowserWindow.fromId(fromWindowId);
-          let meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+solutionName+'.in');
+          let meta_file=fs.readFileSync(path.join(workspaceDir,categoryId+'/'+problemId+'/'+solutionName+'.in'));
           let input =  meta_file.toString();
-          meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+solutionName+'.out');
+          meta_file=fs.readFileSync(path.join(workspaceDir,categoryId+'/'+problemId+'/'+solutionName+'.out'));
           let output =  meta_file.toString();
           let result = {
             "problemId":problemId,
@@ -53,10 +94,14 @@
     });
 
     ipc.on('get-content-from-file-fs', function (event,filePath, fromWindowId) {
+      if(!isWorkspaceValid(workspaceDir,fromWindowId)){
+          window.close();
+          return;
+      }
           const fromWindow = BrowserWindow.fromId(fromWindowId);
-          let meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+solutionName+'.in');
+          let meta_file=fs.readFileSync(path.join(workspaceDir,categoryId+'/'+problemId+'/'+solutionName+'.in'));
           let input =  meta_file.toString();
-          meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+solutionName+'.out');
+          meta_file=fs.readFileSync(path.join(workspaceDir,categoryId+'/'+problemId+'/'+solutionName+'.out'));
           let output =  meta_file.toString();
           let result = {
             "problemId":problemId,
@@ -69,10 +114,14 @@
     });
 
     ipc.on('write-content-to-file-fs', function (event,content, filePath, fromWindowId) {
+      if(!isWorkspaceValid(workspaceDir,fromWindowId)){
+          window.close();
+          return;
+      }
           const fromWindow = BrowserWindow.fromId(fromWindowId);
-          let meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+solutionName+'.in');
+          let meta_file=fs.readFileSync(path.join(workspaceDir,categoryId+'/'+problemId+'/'+solutionName+'.in'));
           let input =  meta_file.toString();
-          meta_file=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+solutionName+'.out');
+          meta_file=fs.readFileSync(path.join(workspaceDir,categoryId+'/'+problemId+'/'+solutionName+'.out'));
           let output =  meta_file.toString();
           let result = {
             "problemId":problemId,
@@ -85,6 +134,7 @@
     });
     
     ipc.on('close-fs-helper', function (event,fromWindowId) {
+      
         console.log("Closing Window");
           const fromWindow = BrowserWindow.fromId(fromWindowId);
           fromWindow.webContents.send('fs-helper-closed', fromWindowId);
