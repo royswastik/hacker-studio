@@ -68,4 +68,8 @@
         console.log("Imported "+importCount+" problems");
     });
 
+    ipcRenderer.on('workspace-error', function (event,message) {
+        alert(message);
+    });
+
 </script>

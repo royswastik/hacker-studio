@@ -1,5 +1,6 @@
 <h1 id="app-name"></h1>
 <button class="show-importer">Show Importer</button>
+<button class="show-configuration">Configuration</button>
         <!--<p class="subtitle">
             Welcome to <a href="http://electron.atom.io" class="js-external-link">Electron</a> app running on this magnificent <strong id="platform-info"></strong> machine.
         </p>-->
@@ -68,6 +69,10 @@ $(document).ready(function(){
 
     $(".show-importer").click(function(){
         pager.loadPage("importer",$("#page-container"),{});
+    });
+
+    $(".show-configuration").click(function(){
+        pager.loadPage("configuration",$("#page-container"),{});
     });
 });
 

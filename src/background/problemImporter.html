@@ -9,11 +9,30 @@
     const glob= require('glob');
     var CryptoJS = require("crypto-js");
     const BrowserWindow = require('electron').remote.BrowserWindow;
+    const Config = require('electron-config');
+    const config = new Config();
 
     ipc.on('import-problems', function (event, filePaths, fromWindowId) {
           const fromWindow = BrowserWindow.fromId(fromWindowId);
+          if((!config.has('activeWorkspace')) || config.get("activeWorkspace") == null){
+              //workspace not set
+              fromWindow.webContents.send('workspace-error', "Active workspace is not set. Set a workspace directory");
+              return;
+          }
+          let workSpaceDir = config.get("activeWorkspace");
+          try{
+              if(!fs.statSync(workSpaceDir).isDirectory()){
+                  //not a directory
+                  fromWindow.webContents.send('workspace-error', "Active workspace value is not a valid directory");
+                  return;
+              }
+          }catch(e){
+              //Unable to access workspace directory
+              fromWindow.webContents.send('workspace-error', "Active workspace can not be accessed");
+              return;
+          }
        //   let workSpaceDir = "file:///D:/workspace/desktop/hacker-studio/src/data";
-          let workSpaceDir = "/home/swastik/dev/hs/hacker_studio/hacker_studio/src/data";
+       //   let workSpaceDir = "/home/swastik/dev/hs/hacker_studio/hacker_studio/src/data";
           var readTextFile = function readTextFile(file)
                 {
                     var rawFile = new XMLHttpRequest();
@@ -41,7 +60,7 @@
               console.log(content);
             //  let content =  readTextFile('file://'+filePath);
               console.log(content);
-              let meta_file_out=fs.readFileSync(workSpaceDir+"/meta.json");
+              let meta_file_out=fs.readFileSync(path.join(workSpaceDir,"/meta.json"));
               let metaObj =  JSON.parse(meta_file_out.toString());
               console.log(metaObj);
                 //  let metaObj =  JSON.parse(readTextFile(workSpaceDir+"/meta.json"));
@@ -72,8 +91,8 @@
                     categoryList.sort();
                     let lastCategory = (categoryList.length > 0)?categoryList[categoryList.length-1]:0;
                     let nextCategory = (parseInt(lastCategory) != undefined)?(lastCategory+1):lastCategory+"1";
-                    fs.mkdirSync(workSpaceDir+"/"+nextCategory);
-                    fs.writeFileSync(workSpaceDir+"/"+nextCategory+"/meta.json", '{"problem-list": []}');
+                    fs.mkdirSync(path.join(workSpaceDir,"/"+nextCategory));
+                    fs.writeFileSync(path.join(workSpaceDir,"/"+nextCategory+"/meta.json"), '{"problem-list": []}');
                     return nextCategory;
                 })();
               console.log("Category Id to be used: "+categoryId);
@@ -82,10 +101,10 @@
                     "id": categoryId,
                     "name" : categoryObj["name"]
                 });
-                fs.writeFileSync(workSpaceDir+"/meta.json",JSON.stringify(metaObj, null, 2));
+                fs.writeFileSync(path.join(workSpaceDir,"/meta.json"),JSON.stringify(metaObj, null, 2));
               
               let problemList = [];
-              let meta_file_out_cat=fs.readFileSync(workSpaceDir+"/"+categoryId+"/meta.json");
+              let meta_file_out_cat=fs.readFileSync(path.join(workSpaceDir,"/"+categoryId+"/meta.json"));
               let metaCatObj =  JSON.parse(meta_file_out_cat.toString());
            //   let metaCatObj = JSON.parse(readTextFile(workSpaceDir+"/"+categoryId+"/meta.json"));
               let problemAlreadyPresentId = (function(){
@@ -113,12 +132,12 @@
                     let lastProblem = (problemList.length > 0)?problemList[problemList.length-1]:0;
                     
                     nextProblem = (parseInt(lastProblem) != undefined)?(lastProblem+1):lastProblem+"1";
-                    fs.mkdirSync(workSpaceDir+"/"+categoryId+"/"+nextProblem);
+                    fs.mkdirSync(path.join(workSpaceDir,"/"+categoryId+"/"+nextProblem));
                     let testCasesArray = [];
                     for(var testCase in testCaseObj){
                         testCasesArray.push(testCase);
                     }
-                    fs.writeFileSync(workSpaceDir+"/"+categoryId+"/"+nextProblem+"/meta.json", '\
+                    fs.writeFileSync(path.join(workSpaceDir,"/"+categoryId+"/"+nextProblem+"/meta.json"), '\
                         {\
                             "id" : "'+nextProblem+'",\
                             "name": "'+problemObj["name"]+'",\
@@ -134,14 +153,14 @@
                 })();
                 console.log("Problem Id to be used: "+problemId);
                 for(var testCase in testCaseObj){
-                    fs.writeFileSync(workSpaceDir+"/"+categoryId+"/"+nextProblem+"/"+testCase+".in", testCaseObj[testCase]["input"]);
-                    fs.writeFileSync(workSpaceDir+"/"+categoryId+"/"+nextProblem+"/"+testCase+".out", testCaseObj[testCase]["output"]);
+                    fs.writeFileSync(path.join(workSpaceDir,"/"+categoryId+"/"+nextProblem+"/"+testCase+".in"), testCaseObj[testCase]["input"]);
+                    fs.writeFileSync(path.join(workSpaceDir,"/"+categoryId+"/"+nextProblem+"/"+testCase+".out"), testCaseObj[testCase]["output"]);
                 }
                 metaCatObj["problem-list"].push({
                     "id": problemId,
                     "name" : problemObj["name"]
                 });
-                fs.writeFileSync(workSpaceDir+"/"+categoryId+"/meta.json",JSON.stringify(metaCatObj, null, 2));
+                fs.writeFileSync(path.join(workSpaceDir,"/"+categoryId+"/meta.json"),JSON.stringify(metaCatObj, null, 2));
             
                  fromWindow.webContents.send('problem-imported', filePaths[i],jsonObj);
 

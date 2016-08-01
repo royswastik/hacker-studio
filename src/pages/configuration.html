@@ -1,14 +1,14 @@
 <h3>HackerStudio Configuration</h3>
 
 <p>
-    <strong>Current workspace directory</strong><br />
+    <strong>Current workspace directory: </strong>
     <span class="current-workspace-directory"></span>
 </p>
 <!--<button class="workspace-set-btn">Change/Set Workspace</button>-->
 
 <div class="change-workspace-box">
-    <select class="workspace-selection-input">
-        <option class="workspace-select-placeholder" value="Select workspcae" disabled selected></option>
+    <select name="workspace-selection-input" class="workspace-selection-input">
+        <option value="Select workspace" disabled selected>Select workspace</option>
     </select>
     <button class="select-workspace-btn" disabled>Set selected workspace</button>
     <br />
@@ -16,7 +16,7 @@
     <button class="set-workspace-btn">Set new workspace</button>
     
     <button class="delete-workspaces-btn">
-        
+        Delete Workspaces
     </button>
 </div>
 
@@ -25,29 +25,63 @@
 </div>
 
 <script>
-    $(document).ready(function(){
-        if(config.has('active-workspace')){
-            $(".current-workspace-directory").html(config.get('active-workspace'));
-        }
-        else{
-            $(".current-workspace-directory").html("No active workspace set. Please set a new workspace");
-        };
-        
+
+    function populateWorkspaceInputs(){
         if(config.has('workspaces') && config.get('workspaces').length > 0){
-            var workspaces = config.get('workspaces');
+            let workspaces = config.get('workspaces');
+            console.log(workspaces);
             $(".workspace-selection-input").html("");
             for(var i=0; i < workspaces.length;i++){
                 $(".workspace-selection-input").append('<option value="'+workspaces[i]+'">'+workspaces[i]+'</option>');
             }
             $('.select-workspace-btn').removeAttr("disabled");
         }
+        else{
+            console.log("No workspaces set");
+        }
+    }
+
+    $(document).ready(function(){
+        console.log("Let's configure stuff");
+        if(config.has('activeWorkspace') || config.get('activeWorkspace') != null){
+            console.log(config.get('activeWorkspace'));
+            $(".current-workspace-directory").html(config.get('activeWorkspace'));
+        }
+        else{
+            console.log("no active workspace");
+            $(".current-workspace-directory").html("No active workspace set. Please set a new workspace");
+        };
+        
+        populateWorkspaceInputs();
         
         $(".select-workspace-btn").click(function(){
+           
+            config.set("activeWorkspace", $(".workspace-selection-input").val());
+            $(".current-workspace-directory").html(config.get("activeWorkspace"));
+            $(".workspace-selection-input").removeAttr("selected");
+            $('.workspace-selection-input[value="'+config.get("activeWorkspace")+'"]').attr("selected", "true");
+
             
         });
         
         $(".set-workspace-btn").click(function(){
-            
+            let newWorkspace = $("#new-workspace-value").val();
+            config.set("activeWorkspace", newWorkspace);
+            $(".current-workspace-directory").html(newWorkspace);
+            let workspaces = (config.has('workspaces') && config.get('workspaces').length > 0)?config.get('workspaces'):[];
+            if($.inArray(newWorkspace, workspaces) == -1){
+                workspaces.push(newWorkspace);
+            }
+
+            config.set("workspaces", workspaces);
+            console.log(config.get("workspaces"));
+            populateWorkspaceInputs();
+        });
+
+        $(".delete-workspaces-btn").click(function(){
+            config.delete("activeWorkspace");
+            config.delete("workspaces");
+            $(".current-workspace-directory").html("");
         });
     });
     
