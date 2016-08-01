@@ -37,6 +37,8 @@
         var BrowserWindow = require('electron').remote.BrowserWindow;
         var path = require("path");
         var dragDrop = require('drag-drop');
+        const Config = require('electron-config');
+        const config = new Config();
         
 
         var ipc = require('electron').ipcRenderer;

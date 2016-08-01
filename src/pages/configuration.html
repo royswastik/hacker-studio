@@ -1,0 +1,54 @@
+<h3>HackerStudio Configuration</h3>
+
+<p>
+    <strong>Current workspace directory</strong><br />
+    <span class="current-workspace-directory"></span>
+</p>
+<!--<button class="workspace-set-btn">Change/Set Workspace</button>-->
+
+<div class="change-workspace-box">
+    <select class="workspace-selection-input">
+        <option class="workspace-select-placeholder" value="Select workspcae" disabled selected></option>
+    </select>
+    <button class="select-workspace-btn" disabled>Set selected workspace</button>
+    <br />
+    <input type="text" name="new-workspace-value" id="new-workspace-value"/>
+    <button class="set-workspace-btn">Set new workspace</button>
+    
+    <button class="delete-workspaces-btn">
+        
+    </button>
+</div>
+
+
+<div class="compilers-setup">
+</div>
+
+<script>
+    $(document).ready(function(){
+        if(config.has('active-workspace')){
+            $(".current-workspace-directory").html(config.get('active-workspace'));
+        }
+        else{
+            $(".current-workspace-directory").html("No active workspace set. Please set a new workspace");
+        };
+        
+        if(config.has('workspaces') && config.get('workspaces').length > 0){
+            var workspaces = config.get('workspaces');
+            $(".workspace-selection-input").html("");
+            for(var i=0; i < workspaces.length;i++){
+                $(".workspace-selection-input").append('<option value="'+workspaces[i]+'">'+workspaces[i]+'</option>');
+            }
+            $('.select-workspace-btn').removeAttr("disabled");
+        }
+        
+        $(".select-workspace-btn").click(function(){
+            
+        });
+        
+        $(".set-workspace-btn").click(function(){
+            
+        });
+    });
+    
+</script>
