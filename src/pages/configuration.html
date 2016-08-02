@@ -1,3 +1,9 @@
+<style>
+    td[data-lang-status="Installed"]{
+        color: green;
+    }
+</style>
+
 <h3>HackerStudio Configuration</h3>
 
 <p>
@@ -22,6 +28,15 @@
 
 
 <div class="compilers-setup">
+    <table>
+        <tr><td>Java: </td><td data-lang-compiler='Java' data-lang-status=''></td></tr>
+        <tr><td>Python: </td><td data-lang-compiler='Python' data-lang-status=''></td></tr>
+        <tr><td>C: </td><td data-lang-compiler='C' data-lang-status=''></td></tr>
+        <tr><td>C++: </td><td data-lang-compiler='C++' data-lang-status=''></td></tr>
+        <tr><td>VB: </td><td data-lang-compiler='VB' data-lang-status=''></td></tr>
+        <tr><td>C#: </td><td data-lang-compiler='CS' data-lang-status=''></td></tr>
+    </table>
+    <button id="check-compilers">Check compilers</button>
 </div>
 
 <script>
@@ -83,6 +98,24 @@
             config.delete("workspaces");
             $(".current-workspace-directory").html("");
         });
+
+        $('#check-compilers').click(function(){
+             const windowID = BrowserWindow.getFocusedWindow().id;
+           let invisPath= 'file://' + path.join(__dirname, 'background/checkCompilers.html');
+            let win = new BrowserWindow({ width: 400, height: 400, show: false });
+            win.loadURL(invisPath);
+            win.webContents.on('did-finish-load', function () {
+                console.log('Starting compilers check');
+                win.webContents.send('check-compilers', windowID);
+            });
+            $('td[data-lang-compiler]').html("Checking");
+        });
+    });
+
+    ipcRenderer.on('compiler-checked', function (event,lang, message) {
+        console.log("Compiler check "+lang);
+        $('td[data-lang-compiler="'+lang+'"]').html(message);
+        $('td[data-lang-compiler="'+lang+'"]').attr('data-lang-status',message);
     });
     
 </script>

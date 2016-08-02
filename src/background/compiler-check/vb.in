@@ -1,0 +1,5 @@
+Module Hello
+  Sub Main()
+      MsgBox("Compiler check") ' Display message on computer screen.
+  End Sub 
+End Module

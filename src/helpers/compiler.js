@@ -21,18 +21,21 @@ module.exports = {
             console.log("Compiling C, C++");
             if(inputRadio === "true")
             {    
-            var envData = { OS : "windows" , cmd : "g++"};      
+            var envData = { OS : "windows" , cmd : "g++"};   
+            let startTime = new Date().getTime();   
             compiler.compileCPPWithInput(envData , code ,input , function (data) {
+                let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
                 if(data.error)
                 {
-                var send_data = data
+                var send_data = data;
                 console.log(send_data);
                 inputObj["output"] = send_data;
                 callback(inputObj);
                 }     
                 else
                 {
-                var send_data = data
+                var send_data = data;
                 inputObj["output"] = send_data;
                 callback(inputObj);
                 }
@@ -41,17 +44,20 @@ module.exports = {
             else
             {
             
-                var envData = { OS : "windows" , cmd : "g++"};     
+                var envData = { OS : "windows" , cmd : "g++"};  
+                let startTime = new Date().getTime();   
                     compiler.compileCPP(envData , code , function (data) {
+                        let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
                     if(data.error)
                     {
-                        var send_data = data
+                        var send_data = data;
                         inputObj["output"] = send_data;
                         callback(inputObj);
                     }     
                     else
                     {
-                        var send_data = data
+                        var send_data = data;
                         inputObj["output"] = send_data;
                         callback(inputObj);
                     }
@@ -66,8 +72,11 @@ module.exports = {
             {
                 var envData = { OS : "windows" };     
                 //console.log(code);
+                let startTime = new Date().getTime();
                 compiler.compileJavaWithInput( envData , code , function(data){
-                    var send_data = data
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
+                    var send_data = data;
                     inputObj["output"] = send_data;
                     console.log(inputObj);
                     callback(inputObj);
@@ -79,8 +88,11 @@ module.exports = {
                 console.log(code);
                 let inputL = input;
                 console.log("Input: "+inputL);
+                let startTime = new Date().getTime();
                 compiler.compileJavaWithInput( envData , code , inputL ,  function(data){
-                    let send_data = data
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
+                    let send_data = data;
                     
                     inputObj["output"] = data;
                     console.log(inputObj);
@@ -96,8 +108,11 @@ module.exports = {
             if(inputRadio === "true")
             {
                 var envData = { OS : "windows"};
+                let startTime = new Date().getTime();
                 compiler.compilePythonWithInput(envData , code , input , function(data){
-                    var send_data = data
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
+                    var send_data = data;
                     console.log(send_data);
                     inputObj["output"] = send_data;
                     callback(inputObj);
@@ -106,8 +121,11 @@ module.exports = {
             else
             {
                 var envData = { OS : "windows"};
+                let startTime = new Date().getTime();
                 compiler.compilePython(envData , code , function(data){
-                    var send_data = data
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
+                    var send_data = data;
                     console.log(send_data);
                     inputObj["output"] = send_data;
                     callback(inputObj);
@@ -119,8 +137,11 @@ module.exports = {
             if(inputRadio === "true")
             {
                 var envData = { OS : "windows"};
+                let startTime = new Date().getTime();
                 compiler.compileCSWithInput(envData , code , input , function(data){
-                    var send_data = data
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
+                    var send_data = data;
                     inputObj["output"] = send_data;
                     callback(inputObj);
                 });            
@@ -128,8 +149,11 @@ module.exports = {
             else
             {
                 var envData = { OS : "windows"};
+                let startTime = new Date().getTime();
                 compiler.compileCS(envData , code , function(data){
-                    var send_data = data
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
+                    var send_data = data;
                     console.log(send_data);
                     inputObj["output"] = send_data;
                     callback(inputObj);
@@ -142,8 +166,11 @@ module.exports = {
             if(inputRadio === "true")
             {
                 var envData = { OS : "windows"};
+                let startTime = new Date().getTime();
                 compiler.compileVBWithInput(envData , code , input , function(data){
-                    var send_data = data
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
+                    var send_data = data;
                     console.log(send_data);
                     inputObj["output"] = send_data;
                     callback(inputObj);
@@ -152,8 +179,11 @@ module.exports = {
             else
             {
                 var envData = { OS : "windows"};
+                let startTime = new Date().getTime();
                 compiler.compileVB(envData , code , function(data){
-                    var send_data = data
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
+                    var send_data = data;
                     console.log(send_data);
                     inputObj["output"] = send_data;
                     callback(inputObj);
@@ -163,19 +193,22 @@ module.exports = {
         }
     },
     compile: function (lang, code, inputRadio, input,callback) {
-        console.log("Input"+input);
-         console.log("inputRadio"+inputRadio);
-         console.log("code"+code);
-         console.log("lang"+lang);
-        console.log("Callback function");
-        console.log(callback);
+        // console.log("Input"+input);
+        //  console.log("inputRadio"+inputRadio);
+        //  console.log("code"+code);
+        //  console.log("lang"+lang);
+        // console.log("Callback function");
+        // console.log(callback);
         if((lang === "C") || (lang === "C++"))
         {        
             console.log("Compiling C, C++");
             if(inputRadio === "true")
             {    
-            var envData = { OS : "windows" , cmd : "g++"};      
+            var envData = { OS : "windows" , cmd : "g++"};
+            let startTime = new Date().getTime(); 
             compiler.compileCPPWithInput(envData , code ,input , function (data) {
+                let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
                 if(data.error)
                 {
                 var send_data = data
@@ -194,7 +227,10 @@ module.exports = {
             {
             
                 var envData = { OS : "windows" , cmd : "g++"};     
+                let startTime = new Date().getTime();
                     compiler.compileCPP(envData , code , function (data) {
+                        let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
                     if(data.error)
                     {
                         var send_data = data
@@ -218,7 +254,10 @@ module.exports = {
             {
                 var envData = { OS : "windows" };     
                 //console.log(code);
+                let startTime = new Date().getTime();
                 compiler.compileJavaWithInput( envData , code , function(data){
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
                     var send_data = data
                     //console.log(send_data);
                     callback(send_data);
@@ -228,7 +267,10 @@ module.exports = {
             {
                 var envData = { OS : "windows" };     
                 console.log(code);
+                let startTime = new Date().getTime();
                 compiler.compileJavaWithInput( envData , code , input ,  function(data){
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
                     var send_data = data
                     console.log(send_data);
                     callback(send_data);
@@ -242,7 +284,10 @@ module.exports = {
             if(inputRadio === "true")
             {
                 var envData = { OS : "windows"};
+                let startTime = new Date().getTime();
                 compiler.compilePythonWithInput(envData , code , input , function(data){
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
                     var send_data = data
                     console.log(send_data);
                     callback(send_data);
@@ -251,7 +296,10 @@ module.exports = {
             else
             {
                 var envData = { OS : "windows"};
+                let startTime = new Date().getTime();
                 compiler.compilePython(envData , code , function(data){
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
                     var send_data = data
                     console.log(send_data);
                     callback(send_data);
@@ -263,7 +311,10 @@ module.exports = {
             if(inputRadio === "true")
             {
                 var envData = { OS : "windows"};
+                let startTime = new Date().getTime();
                 compiler.compileCSWithInput(envData , code , input , function(data){
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
                     var send_data = data
                     console.log(send_data);
                     callback(send_data);
@@ -272,7 +323,10 @@ module.exports = {
             else
             {
                 var envData = { OS : "windows"};
+                let startTime = new Date().getTime();
                 compiler.compileCS(envData , code , function(data){
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
                     var send_data = data
                     console.log(send_data);
                     callback(send_data);
@@ -285,7 +339,10 @@ module.exports = {
             if(inputRadio === "true")
             {
                 var envData = { OS : "windows"};
+                let startTime = new Date().getTime();
                 compiler.compileVBWithInput(envData , code , input , function(data){
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
                     var send_data = data
                     console.log(send_data);
                     callback(send_data);
@@ -294,7 +351,10 @@ module.exports = {
             else
             {
                 var envData = { OS : "windows"};
+                let startTime = new Date().getTime();
                 compiler.compileVB(envData , code , function(data){
+                    let endTime = new Date().getTime(); 
+                data["time"] = endTime - startTime;
                     var send_data = data
                     console.log(send_data);
                     callback(send_data);

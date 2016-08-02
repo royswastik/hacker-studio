@@ -126,6 +126,7 @@
                                 <h6>Output</h6>
                                 <div class="code_output_div">
                                 </div>
+                                <p class="time-required"></p>
                             </div>
                             
                         </div>
@@ -208,6 +209,7 @@ $(window).resize(function(){
       //  $('.code_output_div').resizable();
         ipcRenderer.on('recieve-code-output',function(event,data) {
             console.log('output-from-code-recieved');
+            console.log(data);
             var code_output='';
             if(!data.code_output.error){
                 code_output=data.code_output.output;
@@ -216,7 +218,8 @@ $(window).resize(function(){
             else{
                 code_output=data.code_output.error;
                 $('.code_output_div').html(code_output);
-            }            
+            }      
+            $('.time-required').html(data.code_output.time);   
             
             
         });
