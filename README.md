@@ -6,6 +6,9 @@ Hackerstudio is a desktop application for developers, where they can solve progr
 The project is still under development.
 
 To start the application, follow these steps.
+
 1. Install "electron framework" on your system.
+
 2. Go to project directory from command line.
+
 3. Enter command "electron .", to start the application.
