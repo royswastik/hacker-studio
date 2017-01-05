@@ -1,93 +1,312 @@
-<h1 id="app-name"></h1>
-<button class="show-importer">Show Importer</button>
-<button class="show-configuration">Configuration</button>
-        <!--<p class="subtitle">
+<style>
+    
+    .category-panel{
+            width: 230px;
+    color: #535E68;
+    font-size: 10pt;
+    float: left;
+    background: #2f3b49;
+        height: 1200px;
+    }
+
+    .problem-list-panel{
+        overflow: hidden;
+        display: block;
+    }
+
+    #category-list{
+        padding-left:0;
+    }
+
+    
+
+    .caret-right{
+        border-bottom: 5px solid transparent;
+        border-top: 5px solid transparent;
+        border-left: 5px solid white;
+        display: inline-block;
+        height: 0;
+        opacity: 0.85;
+        vertical-align: top;
+        width: 0;
+    }
+
+    .cat-caret{
+        float: right;
+        opacity: 0;
+        margin-top: -24px;
+        margin-right: 25px;
+    }
+
+    .category-item{
+        padding-left: 22px;
+        border-top: solid 1px #27313b;
+        display: block;
+    }
+
+    .category-item.active{
+        background: #354252;
+        border-left: solid 2px #2164b2;
+        padding-left: 20px;
+    }
+
+    .category-item:hover{
+        cursor: pointer;
+        background: #354252;
+        border-left: solid 2px #2164b2;
+        padding-left: 20px;
+    }
+
+    .category-item.active .cat-caret{
+        opacity: 1;
+    }
+
+    
+
+    .category-item > a{
+        color: #f7f2e6;
+        position: relative;
+        display: block;
+        padding: 10px 15px;
+    }
+
+    
+    .category-item > a:hover{
+        text-decoration: none;
+    }
+
+    .category-search-container{
+        background: transparent;
+        padding: 9px 14px;
+        padding-right: 0;
+        border-top: solid 1px #27313b;
+        display: block;
+    }
+
+    .category-search-input{
+        background: transparent;
+        border: none !important;
+        box-shadow: none !important;
+        width: 195px;
+        color: #fff;
+        outline: none !important;
+        font-size: 10pt;
+        padding: 0px 10px;
+        overflow: hidden;
+    }
+
+    .category-search-icon{
+        background: url("./assets/images/icons/grid1.png");
+        background-repeat: no-repeat;
+        width: 15px;
+        float: left;
+        opacity: 0.8;
+        display: block;
+        background-size: contain;
+        height: 15px;
+        font-size: 10pt;
+        margin-left: -2px;
+    }
+
+    .problem-item > .panel{
+            padding-left: 17px;
+    }
+
+    .problem-item:hover > .panel{
+        background: #f1f2f2;
+        cursor: pointer;
+    }
+
+    .attempt-btn{
+        background: transparent;
+        border: solid 2px #808285;
+        padding: 4px 7px 5px 9px;
+        border-radius: 4px;
+        font-size: 10pt;
+        font-weight: 600;
+        color: #67595b;
+    }
+
+    .attempt-btn:hover{
+        background: #00a79d;
+        color:#fff;
+        border: solid 2px #00a79d;
+    }
+
+    .configuration-links{
+        text-align: center;
+        padding: 15px 0px;
+    }
+
+    .configuration-link{
+        color: #fff;
+        border: solid 1px #fff;
+        padding: 6px 7px;
+        font-size: 9pt;
+        opacity: 0.7;
+        border-radius: 3px;
+        background: transparent;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    .configuration-link:hover{
+        opacity: 1;
+    }
+
+    .right-header{
+        background: #00a79d;
+        margin-top: 0;
+        height: 61px;
+        overflow: hidden;
+    }
+
+</style>
+
+<!--<h1 id="app-name"></h1>-->
+
+<!--<p class="subtitle">
             Welcome to <a href="http://electron.atom.io" class="js-external-link">Electron</a> app running on this magnificent <strong id="platform-info"></strong> machine.
         </p>-->
-        <!--<p class="subtitle">
+<!--<p class="subtitle">
             You are in <strong id="env-name"></strong> environment.
         </p>-->
-        <div class="row">
-            <div class="col-sm-3">
-                <div>
-                    <ul id="category-list" class="nav nav-pills nav-stacked">
-                    </ul>
-                </div>
+ 
+<div>
+    <div class="category-panel">
+        <div class="configuration-links">
+            <button class="configuration-link show-importer">Import Problems</button>
+            <button class="configuration-link show-configuration">Configuration</button>
+        </div>        
+        <div>
+            <div class="category-search-container">
+                <span class="categories-icon category-search-icon">
+
+                </span>
+                <input class="category-search-input" placeholder="Select the below categories" />
             </div>
-            <div class="col-sm-9">
-                <div class="list-group" id="question-list">
-                    
-                </div>
-            </div>
+            <ul id="category-list" class="">
+            </ul>
         </div>
+    </div>
+    <div class="problem-list-panel">
+        <div class="right-header">
+            <h4 style="color:#fff;float:left;    margin: 22px 32px;">Solve HTML Problems</h4>
+            <div class="input-group" style="   
+            float:right;
+        width: 270px;
+    margin: 20px 42px;
+    border-radius: 4px;
+    ">
+                <input
+                style="
+                    padding: 5px 11px;
+                    background: #f1f2f2;
+                    font-size: 10pt;
+                    border: none !important;
+                        height: 28px;
+                    outline: none !important;
+                    box-shadow:none !important;
+                "
+                 type="text" class="form-control" placeholder="Search problems...">
+                <span class="input-group-addon"  style="background:#f1f2f2;font-size: 10pt;
+                    border: none !important;
+                    outline: none !important;
+                    box-shadow:none !important;"><img src="assets/images/icons/search.png" /></span>
+            </div>
+            <!--<input style=" float: right;
+    border: none !important;
+    outline: none !important;
+    font-size: 10pt;
+    padding: 5px 11px;
+        width: 270px;
+    margin: 20px 42px;
+    border-radius: 4px;
+    background: #f1f2f2;" placeholder="Search problems" />-->
+        </div>
+        <div class="list-group" id="question-list" style="min-width: 600px;">
+
+        </div>
+    </div>
+</div>
 
 
 <script>
-ipcRenderer.on('categories-fetched-fs', function (event, input, output) {
-    //   const message = `The factorial of ${input} is ${output}`
-  //  invisReply.textContent = message;
-   var json = JSON.parse(output);
-    $("#category-list").html(json);
-    for(var i = 0 ;i < json["categories"].length;i++){
-        $("#category-list").append('<li role="presentation" class="category-item" id="'+json["categories"][i]["id"]+'"><a href="#">'+json["categories"][i]["name"]+'</a></li>');
+    ipcRenderer.on('categories-fetched-fs', function(event, input, output) {
+        //   const message = `The factorial of ${input} is ${output}`
+        //  invisReply.textContent = message;
+        var json = JSON.parse(output);
+        $("#category-list").html(json);
+        for (var i = 0; i < json["categories"].length; i++) {
+            var active = "";
+            if(i==1)active = "active";
+            $("#category-list").append('<li role="presentation" class="category-item '+active+'" id="' + json["categories"][i]["id"] + '"><a href="#">' + json["categories"][i]["name"] + '</a><span class="caret-right cat-caret"></span></li>');
+        }
+        $(".category-item").click(function() {
+            $("#question-list").html("Loading");
+            var categoryId = $(this).attr("id");
+            $(".category-item").removeClass("active");
+            $(this).addClass("active");
+            fsHelper.open();
+            fsHelper.getProblemsByCategoryId(categoryId);
+            fsHelper.close();
+        });
+    });
+
+    /**
+     * Called when fs helper background service is stopped
+     */
+    ipcRenderer.on('fs-helper-closed', function(event, fromWindowId) {
+        console.log("FS Helper Closed");
+    });
+
+    ipcRenderer.on('problem-list-fetched-fs', function(event, categoryId, result) {
+        console.log("Problem List Fetched for category " + categoryId + " and result");
+        console.log(result);
+        populateList(result["problem-list"]);
+        $(".solve-btn").click(function() {
+            var problemId = $(this).attr("data-problem-id");
+            pager.loadPage("problem", $("#page-container"), {
+                "problemId": problemId,
+                "categoryId": categoryId
+            });
+        });
+
+    });
+
+    
+    ipcRenderer.on('all-problems-fetched', function(event, responseList) {
+        console.log("Total no. of problems: "+responseList.length);
+    });
+
+    /**
+     * Starting background service fsHelper to read data from files
+     */
+    fsHelper.open();
+
+    $(document).ready(function() {
+        fsHelper.getAllCategories();
+        fsHelper.getProblemsByCategoryId(1);
+        fsHelper.getAllProblems();
+        $("html").niceScroll();
+        $(".show-importer").click(function() {
+            pager.loadPage("importer", $("#page-container"), {});
+        });
+
+        $(".show-configuration").click(function() {
+            pager.loadPage("configuration", $("#page-container"), {});
+        });
+    });
+
+
+
+    /**
+     * Populates problems list in problem-list page
+     */
+    function populateList(json) {
+        $("#question-list").html("");
+        console.log(json);
+        for (var i = 0; i < json.length; i++) {
+            $("#question-list").append(getQuestionItem(json[i]["name"], json[i]["id"]));
+        }
     }
-    $(".category-item").click(function(){
-        $("#question-list").html("Loading");
-        var categoryId = $(this).attr("id");
-        fsHelper.open();
-        fsHelper.getProblemsByCategoryId(categoryId);
-        fsHelper.close();
-    });
-});
-
-/**
- * Called when fs helper background service is stopped
- */
-ipcRenderer.on('fs-helper-closed', function (event, fromWindowId) {
-   console.log("FS Helper Closed");
-});
-
-ipcRenderer.on('problem-list-fetched-fs', function (event, categoryId,result) {
-   console.log("Problem List Fetched for category "+categoryId+" and result");
-   console.log(result);
-   populateList(result["problem-list"]);
-   $(".solve-btn").click(function(){
-       var problemId = $(this).attr("data-problem-id");
-        pager.loadPage("problem",$("#page-container"), {"problemId": problemId, "categoryId": categoryId});
-    });
-
-});
-
-/**
- * Starting background service fsHelper to read data from files
- */
-fsHelper.open();
-
-$(document).ready(function(){
-    fsHelper.getAllCategories();
-    fsHelper.getProblemsByCategoryId(1);
-
-    $(".show-importer").click(function(){
-        pager.loadPage("importer",$("#page-container"),{});
-    });
-
-    $(".show-configuration").click(function(){
-        pager.loadPage("configuration",$("#page-container"),{});
-    });
-});
-
-
-
-/**
- * Populates problems list in problem-list page
- */
-function populateList(json){
-    $("#question-list").html("");
-    console.log(json);
-    for(var i =0; i< json.length; i++){
-        $("#question-list").append(getQuestionItem(json[i]["name"], json[i]["id"]));
-    } 
-}
-           
-
 </script>

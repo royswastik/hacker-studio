@@ -1,15 +1,13 @@
 <html>
-  <script type="text/javascript">
-  /**
-   * This file is used as a background service to evaluate a submission
-   */
+<script type="text/javascript">
+    /**
+     * This file is used as a background service to check compilers
+     */
     const ipc = require('electron').ipcRenderer;
-    const fs= require('fs');
-    let path=require('path');
-    const glob= require('glob');
+    const fs = require('fs');
     const compiler = require('../helpers/compiler.js')
     const BrowserWindow = require('electron').remote.BrowserWindow;
-    let codes = {}; 
+    let codes = {};
     codes['Python'] = fs.readFileSync('./background/compiler-check/python27.in');
     codes['Java'] = fs.readFileSync('./background/compiler-check/java.in');
     codes['C'] = fs.readFileSync('./background/compiler-check/c.in');
@@ -17,36 +15,35 @@
     codes['CS'] = fs.readFileSync('./background/compiler-check/csharp.in');
     codes['VB'] = fs.readFileSync('./background/compiler-check/vb.in');
 
-    ipc.on('check-compilers', function (event, fromWindowId) {
-          console.log('Checking compilers');
-          const fromWindow = BrowserWindow.fromId(fromWindowId);
-          let count = 0;
-          let codesKeys = ['Python', 'Java','C','C++','CS','VB'];
+    ipc.on('check-compilers', function(event, fromWindowId) {
+        console.log('Checking compilers');
+        const fromWindow = BrowserWindow.fromId(fromWindowId);
+        let count = 0;
+        let codesKeys = ['Python', 'Java', 'C', 'C++', 'CS', 'VB'];
 
-          var compileCodeCallback = function(response){
-              console.log(response);
-                let message = '';
-                if(!response.error && response.output.includes('Compiler check')){
-                    message = 'Installed';
-                }
-                else{
-                    message = 'Please install compiler for '+codesKeys[count]+' on your system.';
-                }
-                fromWindow.webContents.send('compiler-checked', codesKeys[count], message);
-              if(count==5){
-                  window.close();
-                  return;
-              }
-              count++;
-              compileCode(count);
-          }
+        var compileCodeCallback = function(response) {
+            console.log(response);
+            let message = '';
+            if (!response.error && response.output.includes('Compiler check')) {
+                message = 'Installed';
+            } else {
+                message = 'Please install compiler for ' + codesKeys[count] + ' on your system.';
+            }
+            fromWindow.webContents.send('compiler-checked', codesKeys[count], message);
+            if (count == 5) {
+                window.close();
+                return;
+            }
+            count++;
+            compileCode(count);
+        }
 
-          var compileCode = function(index){
-              compiler.compile(codesKeys[count], codes[codesKeys[count]], false, '',compileCodeCallback);
-          }
-          compileCode(count);
-          
+        var compileCode = function(index) {
+            compiler.compile(codesKeys[count], codes[codesKeys[count]], false, '', compileCodeCallback);
+        }
+        compileCode(count);
+
     });
-    
-  </script>
+</script>
+
 </html>

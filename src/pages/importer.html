@@ -4,72 +4,67 @@
 
 <script>
     document.ondragover = document.ondrop = (ev) => {
-    ev.preventDefault()
+        ev.preventDefault()
     }
 
     document.body.ondrop = (ev) => {
-    console.log(ev.dataTransfer.files[0].path)
-    ev.preventDefault()
+        console.log(ev.dataTransfer.files[0].path)
+        ev.preventDefault()
     }
-    
-    $(document).ready(function(){
-        
-        let focusedId=BrowserWindow.getFocusedWindow().id;
-        dragDrop('#dropTarget', {
-            onDrop: function (files, pos) {
-               // console.log('Dropped at coordinates', pos.x, pos.y)
-              //  console.log('Here are the dropped files', files)
-            
-                  // `files` is an Array! 
-                  let filePaths = [];
-                 files.forEach(function (file) {
-                //     console.log(file.name)
-                //     console.log(file.size)
-                //     console.log(file.type)
-                //     console.log(file.lastModifiedData)
-                //     console.log(file.fullPath);
-                     let extension = file.path.substring(file.path.lastIndexOf(".")+1);
-                     console.log(file.path);
-                     console.log(extension);//Get the file extension
-                     console.log(focusedId);
-                     if(extension == "hack"){
-                         filePaths.push(file.path);
-                     }
-                //     // convert the file to a Buffer that we can use! 
-                //     var reader = new FileReader()
-                //     reader.addEventListener('load', function (e) {
-                //     // e.target.result is an ArrayBuffer 
-                //     var arr = new Uint8Array(e.target.result)
-                //     var buffer = new Buffer(arr)
-                
-                //     // do something with the buffer! 
-                //     })
-                //     reader.addEventListener('error', function (err) {
-                //     console.error('FileReader error' + err)
-                //     })
-                //     reader.readAsArrayBuffer(file)
 
-                 });
-                 problemImporter.importFromFiles(filePaths, focusedId);
+    $(document).ready(function() {
+
+        let focusedId = BrowserWindow.getFocusedWindow().id;
+        dragDrop('#dropTarget', {
+            onDrop: function(files, pos) {
+                // console.log('Dropped at coordinates', pos.x, pos.y)
+                //  console.log('Here are the dropped files', files)
+
+                // `files` is an Array! 
+                let filePaths = [];
+                files.forEach(function(file) {
+                    //     console.log(file.name)
+                    //     console.log(file.size)
+                    //     console.log(file.type)
+                    //     console.log(file.lastModifiedData)
+                    //     console.log(file.fullPath);
+                    let extension = file.path.substring(file.path.lastIndexOf(".") + 1);
+                    console.log(file.path);
+                    console.log(extension); //Get the file extension
+                    console.log(focusedId);
+                    if (extension == "hack") {
+                        filePaths.push(file.path);
+                    }
+                    //     // convert the file to a Buffer that we can use! 
+                    //     var reader = new FileReader()
+                    //     reader.addEventListener('load', function (e) {
+                    //     // e.target.result is an ArrayBuffer 
+                    //     var arr = new Uint8Array(e.target.result)
+                    //     var buffer = new Buffer(arr)
+
+                    //     // do something with the buffer! 
+                    //     })
+                    //     reader.addEventListener('error', function (err) {
+                    //     console.error('FileReader error' + err)
+                    //     })
+                    //     reader.readAsArrayBuffer(file)
+
+                });
+                problemImporter.importFromFiles(filePaths, focusedId);
             },
-            onDragOver: function () {
+            onDragOver: function() {
                 $('#dropTarget').css("background", "green");
             },
-            onDragLeave: function () {
+            onDragLeave: function() {
                 $('#dropTarget').css("background", "blue");
             }
         });
     });
 
     var importCount = 0;
-    ipcRenderer.on('problem-imported', function (event,filepath, jsonObj) {
+    ipcRenderer.on('problem-imported', function(event, filepath, jsonObj) {
         console.log(filepath);
         importCount++;
-        console.log("Imported "+importCount+" problems");
+        console.log("Imported " + importCount + " problems");
     });
-
-    ipcRenderer.on('workspace-error', function (event,message) {
-        alert(message);
-    });
-
 </script>

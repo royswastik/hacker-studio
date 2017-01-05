@@ -1,0 +1,20 @@
+{
+    "categories": [
+        {
+            "id": "1",
+            "name": "Java"
+        },
+        {
+            "id": "2",
+            "name": "C++"
+        },
+        {
+            "id": "3",
+            "name": "C"
+        },
+        {
+            "id": "4",
+            "name": "Python"
+        }
+    ]
+}

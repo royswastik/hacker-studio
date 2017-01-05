@@ -1,0 +1,10 @@
+{
+    "id" : "1_1",
+    "name": "Square Root of an Integer",
+    "problem-statement": "Find Square of an Integer",
+    "input-format": "Input is between 1 to 100.",
+    "output-format": "Output is a single positive integer.",
+    "sample-input": "5",
+    "sample-output": "25",
+    "test-cases": ["1","2", "3", "4"]
+}

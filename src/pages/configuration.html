@@ -1,5 +1,5 @@
 <style>
-    td[data-lang-status="Installed"]{
+    td[data-lang-status="Installed"] {
         color: green;
     }
 </style>
@@ -18,9 +18,9 @@
     </select>
     <button class="select-workspace-btn" disabled>Set selected workspace</button>
     <br />
-    <input type="text" name="new-workspace-value" id="new-workspace-value"/>
+    <input type="text" name="new-workspace-value" id="new-workspace-value" />
     <button class="set-workspace-btn">Set new workspace</button>
-    
+
     <button class="delete-workspaces-btn">
         Delete Workspaces
     </button>
@@ -29,62 +29,77 @@
 
 <div class="compilers-setup">
     <table>
-        <tr><td>Java: </td><td data-lang-compiler='Java' data-lang-status=''></td></tr>
-        <tr><td>Python: </td><td data-lang-compiler='Python' data-lang-status=''></td></tr>
-        <tr><td>C: </td><td data-lang-compiler='C' data-lang-status=''></td></tr>
-        <tr><td>C++: </td><td data-lang-compiler='C++' data-lang-status=''></td></tr>
-        <tr><td>VB: </td><td data-lang-compiler='VB' data-lang-status=''></td></tr>
-        <tr><td>C#: </td><td data-lang-compiler='CS' data-lang-status=''></td></tr>
+        <tr>
+            <td>Java: </td>
+            <td data-lang-compiler='Java' data-lang-status=''></td>
+        </tr>
+        <tr>
+            <td>Python: </td>
+            <td data-lang-compiler='Python' data-lang-status=''></td>
+        </tr>
+        <tr>
+            <td>C: </td>
+            <td data-lang-compiler='C' data-lang-status=''></td>
+        </tr>
+        <tr>
+            <td>C++: </td>
+            <td data-lang-compiler='C++' data-lang-status=''></td>
+        </tr>
+        <tr>
+            <td>VB: </td>
+            <td data-lang-compiler='VB' data-lang-status=''></td>
+        </tr>
+        <tr>
+            <td>C#: </td>
+            <td data-lang-compiler='CS' data-lang-status=''></td>
+        </tr>
     </table>
     <button id="check-compilers">Check compilers</button>
 </div>
 
 <script>
-
-    function populateWorkspaceInputs(){
-        if(config.has('workspaces') && config.get('workspaces').length > 0){
+    function populateWorkspaceInputs() {
+        if (config.has('workspaces') && config.get('workspaces').length > 0) {
             let workspaces = config.get('workspaces');
             console.log(workspaces);
             $(".workspace-selection-input").html("");
-            for(var i=0; i < workspaces.length;i++){
-                $(".workspace-selection-input").append('<option value="'+workspaces[i]+'">'+workspaces[i]+'</option>');
+            for (var i = 0; i < workspaces.length; i++) {
+                $(".workspace-selection-input").append('<option value="' + workspaces[i] + '">' + workspaces[i] + '</option>');
             }
             $('.select-workspace-btn').removeAttr("disabled");
-        }
-        else{
+        } else {
             console.log("No workspaces set");
         }
     }
 
-    $(document).ready(function(){
+    $(document).ready(function() {
         console.log("Let's configure stuff");
-        if(config.has('activeWorkspace') || config.get('activeWorkspace') != null){
+        if (config.has('activeWorkspace') || config.get('activeWorkspace') != null) {
             console.log(config.get('activeWorkspace'));
             $(".current-workspace-directory").html(config.get('activeWorkspace'));
-        }
-        else{
+        } else {
             console.log("no active workspace");
             $(".current-workspace-directory").html("No active workspace set. Please set a new workspace");
         };
-        
+
         populateWorkspaceInputs();
-        
-        $(".select-workspace-btn").click(function(){
-           
+
+        $(".select-workspace-btn").click(function() {
+
             config.set("activeWorkspace", $(".workspace-selection-input").val());
             $(".current-workspace-directory").html(config.get("activeWorkspace"));
             $(".workspace-selection-input").removeAttr("selected");
-            $('.workspace-selection-input[value="'+config.get("activeWorkspace")+'"]').attr("selected", "true");
+            $('.workspace-selection-input[value="' + config.get("activeWorkspace") + '"]').attr("selected", "true");
 
-            
+
         });
-        
-        $(".set-workspace-btn").click(function(){
+
+        $(".set-workspace-btn").click(function() {
             let newWorkspace = $("#new-workspace-value").val();
             config.set("activeWorkspace", newWorkspace);
             $(".current-workspace-directory").html(newWorkspace);
-            let workspaces = (config.has('workspaces') && config.get('workspaces').length > 0)?config.get('workspaces'):[];
-            if($.inArray(newWorkspace, workspaces) == -1){
+            let workspaces = (config.has('workspaces') && config.get('workspaces').length > 0) ? config.get('workspaces') : [];
+            if ($.inArray(newWorkspace, workspaces) == -1) {
                 workspaces.push(newWorkspace);
             }
 
@@ -93,18 +108,22 @@
             populateWorkspaceInputs();
         });
 
-        $(".delete-workspaces-btn").click(function(){
+        $(".delete-workspaces-btn").click(function() {
             config.delete("activeWorkspace");
             config.delete("workspaces");
             $(".current-workspace-directory").html("");
         });
 
-        $('#check-compilers').click(function(){
-             const windowID = BrowserWindow.getFocusedWindow().id;
-           let invisPath= 'file://' + path.join(__dirname, 'background/checkCompilers.html');
-            let win = new BrowserWindow({ width: 400, height: 400, show: false });
+        $('#check-compilers').click(function() {
+            const windowID = BrowserWindow.getFocusedWindow().id;
+            let invisPath = 'file://' + path.join(__dirname, 'background/checkCompilers.html');
+            let win = new BrowserWindow({
+                width: 400,
+                height: 400,
+                show: false
+            });
             win.loadURL(invisPath);
-            win.webContents.on('did-finish-load', function () {
+            win.webContents.on('did-finish-load', function() {
                 console.log('Starting compilers check');
                 win.webContents.send('check-compilers', windowID);
             });
@@ -112,10 +131,9 @@
         });
     });
 
-    ipcRenderer.on('compiler-checked', function (event,lang, message) {
-        console.log("Compiler check "+lang);
-        $('td[data-lang-compiler="'+lang+'"]').html(message);
-        $('td[data-lang-compiler="'+lang+'"]').attr('data-lang-status',message);
+    ipcRenderer.on('compiler-checked', function(event, lang, message) {
+        console.log("Compiler check " + lang);
+        $('td[data-lang-compiler="' + lang + '"]').html(message);
+        $('td[data-lang-compiler="' + lang + '"]').attr('data-lang-status', message);
     });
-    
 </script>

@@ -1,176 +1,170 @@
 <html>
-  <script type="text/javascript">
-  /**
-   * This file is used as a background service to evaluate a submission
-   */
+<script type="text/javascript">
+    /**
+     * This file is used as a background service to import problems into the software
+     */
     const ipc = require('electron').ipcRenderer;
-    const fs= require('fs');
-    let path=require('path');
-    const glob= require('glob');
+    const fs = require('fs');
+    let path = require('path');
+    const glob = require('glob');
     var CryptoJS = require("crypto-js");
     const BrowserWindow = require('electron').remote.BrowserWindow;
     const Config = require('electron-config');
     const config = new Config();
 
-    ipc.on('import-problems', function (event, filePaths, fromWindowId) {
-          const fromWindow = BrowserWindow.fromId(fromWindowId);
-          if((!config.has('activeWorkspace')) || config.get("activeWorkspace") == null){
-              //workspace not set
-              fromWindow.webContents.send('workspace-error', "Active workspace is not set. Set a workspace directory");
-              return;
-          }
-          let workSpaceDir = config.get("activeWorkspace");
-          try{
-              if(!fs.statSync(workSpaceDir).isDirectory()){
-                  //not a directory
-                  fromWindow.webContents.send('workspace-error', "Active workspace value is not a valid directory");
-                  return;
-              }
-          }catch(e){
-              //Unable to access workspace directory
-              fromWindow.webContents.send('workspace-error', "Active workspace can not be accessed");
-              return;
-          }
-       //   let workSpaceDir = "file:///D:/workspace/desktop/hacker-studio/src/data";
-       //   let workSpaceDir = "/home/swastik/dev/hs/hacker_studio/hacker_studio/src/data";
-          var readTextFile = function readTextFile(file)
-                {
-                    var rawFile = new XMLHttpRequest();
-                    rawFile.open("GET", file, false);
-                    rawFile.onreadystatechange = function ()
-                    {
-                        if(rawFile.readyState === 4)
-                        {
-                            if(rawFile.status === 200 || rawFile.status == 0)
-                            {
-                                var allText = rawFile.responseText;
-                                alert(allText);
-                            }
-                        }
+    ipc.on('import-problems', function(event, filePaths, fromWindowId) {
+        const fromWindow = BrowserWindow.fromId(fromWindowId);
+        if ((!config.has('activeWorkspace')) || config.get("activeWorkspace") == null) {
+            //workspace not set
+            fromWindow.webContents.send('workspace-error', "Active workspace is not set. Set a workspace directory");
+            return;
+        }
+        let workSpaceDir = config.get("activeWorkspace");
+        try {
+            if (!fs.statSync(workSpaceDir).isDirectory()) {
+                //not a directory
+                fromWindow.webContents.send('workspace-error', "Active workspace value is not a valid directory");
+                return;
+            }
+        } catch (e) {
+            //Unable to access workspace directory
+            fromWindow.webContents.send('workspace-error', "Active workspace can not be accessed");
+            return;
+        }
+        var readTextFile = function readTextFile(file) {
+            var rawFile = new XMLHttpRequest();
+            rawFile.open("GET", file, false);
+            rawFile.onreadystatechange = function() {
+                if (rawFile.readyState === 4) {
+                    if (rawFile.status === 200 || rawFile.status == 0) {
+                        var allText = rawFile.responseText;
+                        alert(allText);
                     }
-                    rawFile.send(null);
                 }
-          
-          
-          for(var i=0;i < filePaths.length;i++){
-              let filePath = filePaths[i].replace(new RegExp("\\".replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1"), 'g'), "/");
-              console.log(filePath);
-              let newFile=fs.readFileSync(filePath);//'file://'+
-              let content =  newFile.toString();
-              console.log(content);
+            }
+            rawFile.send(null);
+        }
+
+
+        for (var i = 0; i < filePaths.length; i++) {
+            let filePath = filePaths[i].replace(new RegExp("\\".replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1"), 'g'), "/");
+            console.log(filePath);
+            let newFile = fs.readFileSync(filePath); //'file://'+
+            let content = newFile.toString();
+            console.log(content);
             //  let content =  readTextFile('file://'+filePath);
-              console.log(content);
-              let meta_file_out=fs.readFileSync(path.join(workSpaceDir,"/meta.json"));
-              let metaObj =  JSON.parse(meta_file_out.toString());
-              console.log(metaObj);
-                //  let metaObj =  JSON.parse(readTextFile(workSpaceDir+"/meta.json"));
-              // Decrypt 
+            console.log(content);
+            let meta_file_out = fs.readFileSync(path.join(workSpaceDir, "/meta.json"));
+            let metaObj = JSON.parse(meta_file_out.toString());
+            console.log(metaObj);
+            //  let metaObj =  JSON.parse(readTextFile(workSpaceDir+"/meta.json"));
+            // Decrypt 
             //   let bytes  = CryptoJS.AES.decrypt(content.toString(), 'HackerStudio Secret Key');
             //   content = bytes.toString(CryptoJS.enc.Utf8);
-              
-              let jsonObj = JSON.parse(content);
-              
-              let categoryObj = jsonObj["category"];
-              let problemObj = jsonObj["problem"];
-              let testCaseObj = jsonObj["test-cases"];
 
-              let categoryList = [];
-              let categoryAlreadyPresentId = (function(){
-                    let returnObj = null;
-                    for(var i=0;i<metaObj["categories"].length;i++){
-                        if(metaObj["categories"][i]["name"].trim().toLowerCase() == categoryObj["name"].trim().toLowerCase()){
-                            returnObj = metaObj["categories"][i]["id"].trim().toLowerCase();
-                        }
-                        categoryList.push(metaObj["categories"][i]["id"]);
+            let jsonObj = JSON.parse(content);
+
+            let categoryObj = jsonObj["category"];
+            let problemObj = jsonObj["problem"];
+            let testCaseObj = jsonObj["test-cases"];
+
+            let categoryList = [];
+            let categoryAlreadyPresentId = (function() {
+                let returnObj = null;
+                for (var i = 0; i < metaObj["categories"].length; i++) {
+                    if (metaObj["categories"][i]["name"].trim().toLowerCase() == categoryObj["name"].trim().toLowerCase()) {
+                        returnObj = metaObj["categories"][i]["id"].trim().toLowerCase();
                     }
-                    return returnObj;
-              })();
-              console.log("Category Id if already Present: "+categoryAlreadyPresentId);
-              let categoryId = (categoryAlreadyPresentId != null)?categoryAlreadyPresentId:
-                (function(){
+                    categoryList.push(metaObj["categories"][i]["id"]);
+                }
+                return returnObj;
+            })();
+            console.log("Category Id if already Present: " + categoryAlreadyPresentId);
+            let categoryId = (categoryAlreadyPresentId != null) ? categoryAlreadyPresentId :
+                (function() {
                     categoryList.sort();
-                    let lastCategory = (categoryList.length > 0)?categoryList[categoryList.length-1]:0;
-                    let nextCategory = (parseInt(lastCategory) != undefined)?(lastCategory+1):lastCategory+"1";
-                    fs.mkdirSync(path.join(workSpaceDir,"/"+nextCategory));
-                    fs.writeFileSync(path.join(workSpaceDir,"/"+nextCategory+"/meta.json"), '{"problem-list": []}');
+                    let lastCategory = (categoryList.length > 0) ? categoryList[categoryList.length - 1] : 0;
+                    let nextCategory = (parseInt(lastCategory) != undefined) ? (lastCategory + 1) : lastCategory + "1";
+                    fs.mkdirSync(path.join(workSpaceDir, "/" + nextCategory));
+                    fs.writeFileSync(path.join(workSpaceDir, "/" + nextCategory + "/meta.json"), '{"problem-list": []}');
                     return nextCategory;
                 })();
-              console.log("Category Id to be used: "+categoryId);
-              
-              metaObj["categories"].push({
-                    "id": categoryId,
-                    "name" : categoryObj["name"]
-                });
-                fs.writeFileSync(path.join(workSpaceDir,"/meta.json"),JSON.stringify(metaObj, null, 2));
-              
-              let problemList = [];
-              let meta_file_out_cat=fs.readFileSync(path.join(workSpaceDir,"/"+categoryId+"/meta.json"));
-              let metaCatObj =  JSON.parse(meta_file_out_cat.toString());
-           //   let metaCatObj = JSON.parse(readTextFile(workSpaceDir+"/"+categoryId+"/meta.json"));
-              let problemAlreadyPresentId = (function(){
-                  let returnObj = null;
-                    for(var i=0;i<metaCatObj["problem-list"].length;i++){
-                        if(metaCatObj["problem-list"][i]["name"].trim().toLowerCase() == problemObj["name"].trim().toLowerCase()){
-                            returnObj = metaCatObj["problem-list"][i]["id"].trim().toLowerCase();
-                        }
-                        problemList.push(metaCatObj["problem-list"][i]["id"]);
-                    }
-                    return returnObj;
-              })();
-              console.log("Problem Id if already Present: "+problemAlreadyPresentId);
+            console.log("Category Id to be used: " + categoryId);
 
-              if(problemAlreadyPresentId != null){
-                  /**
-                   * Problem Already Present, return status
-                   */
-                  console.log("Problem already present");
-              }
-              let nextProblem = null;
-              let problemId = (function(){
-                    problemList.sort();
-                    console.log(problemList);
-                    let lastProblem = (problemList.length > 0)?problemList[problemList.length-1]:0;
-                    
-                    nextProblem = (parseInt(lastProblem) != undefined)?(lastProblem+1):lastProblem+"1";
-                    fs.mkdirSync(path.join(workSpaceDir,"/"+categoryId+"/"+nextProblem));
-                    let testCasesArray = [];
-                    for(var testCase in testCaseObj){
-                        testCasesArray.push(testCase);
+            metaObj["categories"].push({
+                "id": categoryId,
+                "name": categoryObj["name"]
+            });
+            fs.writeFileSync(path.join(workSpaceDir, "/meta.json"), JSON.stringify(metaObj, null, 2));
+
+            let problemList = [];
+            let meta_file_out_cat = fs.readFileSync(path.join(workSpaceDir, "/" + categoryId + "/meta.json"));
+            let metaCatObj = JSON.parse(meta_file_out_cat.toString());
+            //   let metaCatObj = JSON.parse(readTextFile(workSpaceDir+"/"+categoryId+"/meta.json"));
+            let problemAlreadyPresentId = (function() {
+                let returnObj = null;
+                for (var i = 0; i < metaCatObj["problem-list"].length; i++) {
+                    if (metaCatObj["problem-list"][i]["name"].trim().toLowerCase() == problemObj["name"].trim().toLowerCase()) {
+                        returnObj = metaCatObj["problem-list"][i]["id"].trim().toLowerCase();
                     }
-                    fs.writeFileSync(path.join(workSpaceDir,"/"+categoryId+"/"+nextProblem+"/meta.json"), '\
+                    problemList.push(metaCatObj["problem-list"][i]["id"]);
+                }
+                return returnObj;
+            })();
+            console.log("Problem Id if already Present: " + problemAlreadyPresentId);
+
+            if (problemAlreadyPresentId != null) {
+                /**
+                 * Problem Already Present, return status
+                 */
+                console.log("Problem already present");
+            }
+            let nextProblem = null;
+            let problemId = (function() {
+                problemList.sort();
+                console.log(problemList);
+                let lastProblem = (problemList.length > 0) ? problemList[problemList.length - 1] : 0;
+
+                nextProblem = (parseInt(lastProblem) != undefined) ? (lastProblem + 1) : lastProblem + "1";
+                fs.mkdirSync(path.join(workSpaceDir, "/" + categoryId + "/" + nextProblem));
+                let testCasesArray = [];
+                for (var testCase in testCaseObj) {
+                    testCasesArray.push(testCase);
+                }
+                fs.writeFileSync(path.join(workSpaceDir, "/" + categoryId + "/" + nextProblem + "/meta.json"), '\
                         {\
-                            "id" : "'+nextProblem+'",\
-                            "name": "'+problemObj["name"]+'",\
-                            "problem-statement": "'+problemObj["problem-statement"]+'",\
-                            "input-format": "'+problemObj["input-format"]+'",\
-                            "output-format": "'+problemObj["output-format"]+'",\
-                            "sample-input": "'+problemObj["sample-input"]+'",\
-                            "sample-output": "'+problemObj["sample-output"]+'",\
-                            "test-cases": ['+testCasesArray.toString()+']\
+                            "id" : "' + nextProblem + '",\
+                            "name": "' + problemObj["name"] + '",\
+                            "problem-statement": "' + problemObj["problem-statement"] + '",\
+                            "input-format": "' + problemObj["input-format"] + '",\
+                            "output-format": "' + problemObj["output-format"] + '",\
+                            "sample-input": "' + problemObj["sample-input"] + '",\
+                            "sample-output": "' + problemObj["sample-output"] + '",\
+                            "test-cases": [' + testCasesArray.toString() + ']\
                         }\
                     ');
-                    return nextProblem;
-                })();
-                console.log("Problem Id to be used: "+problemId);
-                for(var testCase in testCaseObj){
-                    fs.writeFileSync(path.join(workSpaceDir,"/"+categoryId+"/"+nextProblem+"/"+testCase+".in"), testCaseObj[testCase]["input"]);
-                    fs.writeFileSync(path.join(workSpaceDir,"/"+categoryId+"/"+nextProblem+"/"+testCase+".out"), testCaseObj[testCase]["output"]);
-                }
-                metaCatObj["problem-list"].push({
-                    "id": problemId,
-                    "name" : problemObj["name"]
-                });
-                fs.writeFileSync(path.join(workSpaceDir,"/"+categoryId+"/meta.json"),JSON.stringify(metaCatObj, null, 2));
-            
-                 fromWindow.webContents.send('problem-imported', filePaths[i],jsonObj);
+                return nextProblem;
+            })();
+            console.log("Problem Id to be used: " + problemId);
+            for (var testCase in testCaseObj) {
+                fs.writeFileSync(path.join(workSpaceDir, "/" + categoryId + "/" + nextProblem + "/" + testCase + ".in"), testCaseObj[testCase]["input"]);
+                fs.writeFileSync(path.join(workSpaceDir, "/" + categoryId + "/" + nextProblem + "/" + testCase + ".out"), testCaseObj[testCase]["output"]);
+            }
+            metaCatObj["problem-list"].push({
+                "id": problemId,
+                "name": problemObj["name"]
+            });
+            fs.writeFileSync(path.join(workSpaceDir, "/" + categoryId + "/meta.json"), JSON.stringify(metaCatObj, null, 2));
 
-              // Encrypt 
-         //     let ciphertext = CryptoJS.AES.encrypt(content, 'HackerStudio Secret Key');
-              
-          }
-         
-          
+            fromWindow.webContents.send('problem-imported', filePaths[i], jsonObj);
+
+            // Encrypt 
+            //     let ciphertext = CryptoJS.AES.encrypt(content, 'HackerStudio Secret Key');
+
+        }
+
+
     });
-    
-  </script>
+</script>
+
 </html>

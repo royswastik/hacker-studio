@@ -1,98 +1,96 @@
 <html>
-  <script type="text/javascript">
-  /**
-   * This file is used as a background service to evaluate a submission
-   */
+<script type="text/javascript">
+    /**
+     * This file is used as a background service to evaluate a submission
+     */
     const ipc = require('electron').ipcRenderer;
-    const fs= require('fs');
-    let path=require('path');
-    const glob= require('glob');
+    const fs = require('fs');
+    let path = require('path');
     const compiler = require('../helpers/compiler.js')
     const BrowserWindow = require('electron').remote.BrowserWindow;
 
-    ipc.on('make-submission', function (event, options, fromWindowId) {
-          const fromWindow = BrowserWindow.fromId(fromWindowId);
-          let cases = options.problemObj["test-cases"];
-          let problemId = options.problemObj["problemId"];
-          let categoryId = options.problemObj["categoryId"];
-          let inputRadio = true;
-          let code = options.code;
-          let lang = options.lang;
-          let input = options.input;
-          console.log("Making Submission");
-          var evaluation_result = {
-              "test-cases-count": cases.length,
-              "solved-test-cases-count": 0
-          };
-          var case_results = [];
-          var solvedCount = 0;
-          let compiledCount = 0;
-          let inputObjArray = [];
-          for(var i=0; i < cases.length; i++){
-              let testCase = cases[i];
-              let meta_file_in=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+testCase+'.in');
-              let input = meta_file_in.toString();
-              let meta_file_out=fs.readFileSync('./data/'+categoryId+'/'+problemId+'/'+testCase+'.out');
-              let output = meta_file_out.toString();
-              var inputObjTemp = {
-                    "input":input,
-                    "lang": lang,
-                    "inputRadio":inputRadio,
-                    "testCase": testCase,
-                    "expected-output":output,
-                    "code": code
-                }
-              inputObjArray.push(inputObjTemp);
-              //fromWindow.webContents.send('case-evaluated', options, result);
-          }
-          console.log(inputObjArray);
-          let inputObjIndex = 0;
-        
-            var compileCodeCallback = function(response){
-                compiledOutput = response["output"].output;
-                        console.log("Compiled Output: for "+response["input"]+" is "+compiledOutput);
-                        compiledCount++;
-                        console.log(response);
-                        console.log(compiledCount);
-                        let case_result = {
-                            "compiled-output":  compiledOutput,
-                            "expected-output": response["expected-output"],
-                            "testCase": response["testCase"]
-                        }
-                        if(compiledOutput.trim() ==response["expected-output"].trim()){
-                            solvedCount++;
-                            case_result["status"] = "solved";
-                        }
-                        else if(compiledOutput.trim() !=response["expected-output"].trim()){
-                            case_result["status"] = "wrong-answer";
-                        }
-                        if(compiledOutput.trim() == "tle"){
-                            case_result["status"] = "tle";
-                        }
-                        if(compiledOutput.trim().toLowerCase().includes("runtime") && case_result.trim().toLowerCase().includes("exception")){
-                            case_result["status"] = "re";
-                        }
+    ipc.on('make-submission', function(event, options, fromWindowId) {
+        const fromWindow = BrowserWindow.fromId(fromWindowId);
+        let cases = options.problemObj["test-cases"];
+        let problemId = options.problemObj["problemId"];
+        let categoryId = options.problemObj["categoryId"];
+        let inputRadio = true;
+        let code = options.code;
+        let lang = options.lang;
+        let input = options.input;
+        console.log("Making Submission");
+        var evaluation_result = {
+            "test-cases-count": cases.length,
+            "solved-test-cases-count": 0
+        };
+        var case_results = [];
+        var solvedCount = 0;
+        let compiledCount = 0;
+        let inputObjArray = [];
+        for (var i = 0; i < cases.length; i++) {
+            let testCase = cases[i];
+            let meta_file_in = fs.readFileSync('./data/' + categoryId + '/' + problemId + '/' + testCase + '.in');
+            let input = meta_file_in.toString();
+            let meta_file_out = fs.readFileSync('./data/' + categoryId + '/' + problemId + '/' + testCase + '.out');
+            let output = meta_file_out.toString();
+            var inputObjTemp = {
+                "input": input,
+                "lang": lang,
+                "inputRadio": inputRadio,
+                "testCase": testCase,
+                "expected-output": output,
+                "code": code
+            }
+            inputObjArray.push(inputObjTemp);
+            //fromWindow.webContents.send('case-evaluated', options, result);
+        }
+        console.log(inputObjArray);
+        let inputObjIndex = 0;
 
-                        case_results.push(case_result);
-                        console.log(case_results);
-                        if(compiledCount == cases.length){
-                            evaluation_result["solved-test-cases-count"] = solvedCount;
-                            evaluation_result["case-results"] = case_results;
-                            fromWindow.webContents.send('made-submission', options, evaluation_result);
-                             window.close();
-                             return;
-                        }
-                        inputObjIndex++;
-                        compileCode(inputObjIndex);
+        var compileCodeCallback = function(response) {
+            compiledOutput = response["output"].output;
+            console.log("Compiled Output: for " + response["input"] + " is " + compiledOutput);
+            compiledCount++;
+            console.log(response);
+            console.log(compiledCount);
+            let case_result = {
+                "compiled-output": compiledOutput,
+                "expected-output": response["expected-output"],
+                "testCase": response["testCase"]
             }
-            var compileCode = function(index){
-                compiler.compileForTestCase(inputObjArray[index],
+            if (compiledOutput.trim() == response["expected-output"].trim()) {
+                solvedCount++;
+                case_result["status"] = "solved";
+            } else if (compiledOutput.trim() != response["expected-output"].trim()) {
+                case_result["status"] = "wrong-answer";
+            }
+            if (compiledOutput.trim() == "tle") {
+                case_result["status"] = "tle";
+            }
+            if (compiledOutput.trim().toLowerCase().includes("runtime") && case_result.trim().toLowerCase().includes("exception")) {
+                case_result["status"] = "re";
+            }
+
+            case_results.push(case_result);
+            console.log(case_results);
+            if (compiledCount == cases.length) {
+                evaluation_result["solved-test-cases-count"] = solvedCount;
+                evaluation_result["case-results"] = case_results;
+                fromWindow.webContents.send('made-submission', options, evaluation_result);
+                window.close();
+                return;
+            }
+            inputObjIndex++;
+            compileCode(inputObjIndex);
+        }
+        var compileCode = function(index) {
+            compiler.compileForTestCase(inputObjArray[index],
                 compileCodeCallback);
-            }
-            console.log(inputObjArray);
-            compileCode(0,compileCodeCallback);
-          
+        }
+        console.log(inputObjArray);
+        compileCode(0, compileCodeCallback);
+
     });
-    
-  </script>
+</script>
+
 </html>

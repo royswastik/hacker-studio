@@ -1,0 +1,315 @@
+<style>
+    .code_output_div {
+        background: #f2f5fa;
+        border: 1px solid #aaa;
+        border-radius: 3px;
+        margin-top: 15px;
+        padding: 10px;
+        min-height: 50px;
+    }
+    
+    #editor {
+        height: 700px;
+    }
+    
+    .test-cases> ul> li[data-status="solved"] {
+        color: green;
+    }
+    
+    .test-cases> ul> li[data-status="wrong-answer"] {
+        color: red;
+    }
+    
+    .test-cases> ul> li[data-status="re"] {
+        color: pink;
+    }
+    
+    .test-cases> ul> li[data-status="tle"] {
+        color: orange;
+    }
+    
+    .sidePanel-section {
+        display: none;
+    }
+    
+    div[data-active-section="problem-description"]> .sidePanel-section.problem-description {
+        display: block;
+    }
+    
+    div[data-active-section="evaluation"]> .sidePanel-section.evaluation {
+        display: block;
+    }
+    
+    div[data-active-section="code-input-output"]> .sidePanel-section.code-input-output {
+        display: block;
+    }
+</style>
+
+<div class="row" style="padding-top:40px;">
+    <div class="col-sm-12">
+        <div class="header-bar" style="background: whiteSmoke;display: block;width: 100%;height: 40px;position:fixed;top:0px;z-index:50;">
+
+            <div style="float:left;"><button class="back-btn btn btn-default" style="font-size: 11pt;cursor:pointer;margin-top: 2px;">Back</button></div>
+            <div style="float:left;"><button data-show="problem-description" class="section-show-btn btn btn-default" style="font-size: 11pt;cursor:pointer;margin-top: 2px;">Show Problem</button></div>
+            <div style="float:left;"><button data-show="evaluation" class="section-show-btn btn btn-default" style="font-size: 11pt;cursor:pointer;margin-top: 2px;">Evaluation</button></div>
+            <div style="float:left;"><button data-show="code-input-output" class="section-show-btn btn btn-default" style="font-size: 11pt;cursor:pointer;margin-top: 2px;">IO</button></div>
+
+
+            <button class="submit-code-btn btn btn-warning" style="float: right;    font-size: 11pt;cursor:pointer;margin-right: 70px;margin-top: 2px;">Submit</button>
+            <button class="compile-code-btn btn btn-success" style="float: right;    font-size: 11pt;cursor:pointer;margin-right: 35px;margin-top: 2px;">Compile</button>
+            <select name="lang" id="lang-select-drop" style="float:right;margin-right: 30px;font-size: 12pt;margin-top: 8px;">
+                            <option value="C">C</option>
+                            <option value="C++">C++</option>
+                            <option value="Java">Java</option>  
+                            <option value="Python" selected>Python</option> 
+                            <option value="CS">C#</option>  
+                            <option value="VB">VB</option>
+                        </select>
+
+
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <div style=" overflow-y:hidden; overflow-x:hidden;float:left;width:300px;" class="ui-widget-content" id="sidePanel">
+            <div style="padding-left: 30px; overflow-y:scroll; height: 100%;" id="sidepanel-section-wrapper" data-active-section="problem-description">
+                <div class="problem-description sidePanel-section">
+                    <h3 class="problem-name"></h3>
+                    <h5><strong>Problem Statement</strong></h5>
+                    <p class="problem-statement">Welcome to HackerRank! The purpose of this challenge is to familiarize you with reading input from stdin (the standard input stream) and writing output to stdout (the standard output stream) using our environment. Review the code provided in the editor below, then complete the solveMeFirst function so that it returns the sum of two integers read from stdin. Take some time to understand this code so you're prepared to write it yourself in future challenges. Select a language below, and start coding!</p>
+                    <br />
+                    <h5><strong>Input Format</strong></h5>
+                    <p class="input-format">Code that reads input from stdin is provided for you in the editor. There are lines of input, and each line contains a single integer.</p>
+                    <br />
+                    <h5><strong>Output Format</strong></h5>
+                    <p class="output-format">Code that prints the sum calculated and returned by solveMeFirst is provided for you in the editor.</p>
+                    <h5><strong>Sample Input</strong></h5>
+                    <p class="sample-input">5</p>
+                    <h5><strong>Sample Output</strong></h5>
+                    <p class="sample-output">25</p>
+                    <br />
+
+
+                </div>
+                <div class="evaluation  sidePanel-section">
+                    <div class="evaluation-status"></div>
+                    <p style="text-align:center;" class="evaluating">Evaluating</p>
+                    <div class="code-evaluation-output">
+
+                    </div>
+                    <div class="test-cases">
+                        <ul style="padding-left:0;">
+                            <li id="case-1" data-status="unsolved">
+                                Test Case 1. Status: Unsolved <br />
+                                <span></span>
+                            </li>
+                            <li id="case-2" data-status="solved">
+                                Test Case 2. Status: Unsolved <br />
+                                <span></span>
+                            </li>
+                            <li id="case-3" data-status="wrong-answer">
+                                Test Case 3. Status: Unsolved <br />
+                                <span></span>
+                            </li>
+                            <li id="case-4" data-status="re">
+                                Test Case 4. Status: Unsolved <br />
+                                <span></span>
+                            </li>
+                            <li id="case-5" data-status="tle">
+                                Test Case 5. Status: Unsolved <br />
+                                <span></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="code-input-output  sidePanel-section">
+
+                    <h6 class="code-input-div">
+                                    <textarea id="code-input" class="form-control"></textarea>
+                                </h6>
+                    <h6>Output</h6>
+                    <div class="code_output_div">
+                    </div>
+                    <p class="time-required"></p>
+                </div>
+
+            </div>
+
+        </div>
+        <div style="padding-left:0;overflow:hidden;">
+
+            <div id="editor-wrapper">
+                <div id="editor">print "Hello Hacker"</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function setTextFromJson(json, text) {
+        if (json[text] && json[text] != "") {
+            $("." + text).html(json[text]);
+        }
+    }
+
+    let problemObj;
+    /**
+     * Called when data about the problem is fetched
+     * The response contains name, id, test case names, problem statement, input format, output format, notes, etc.
+     */
+    ipcRenderer.on('problem-fetched', function(event, categoryId, result) {
+        console.log("Problem  Fetched for category " + categoryId + " and result");
+        console.log(result);
+        $(".problem-name").html(result["name"]);
+        setTextFromJson(result, "problem-statement");
+        setTextFromJson(result, "input-format");
+        setTextFromJson(result, "output-format");
+        setTextFromJson(result, "sample-input");
+        setTextFromJson(result, "sample-output");
+        $(".test-cases > ul").html("");
+        if (result["test-cases"] && result["test-cases"].length > 0) {
+            for (var i = 0; i < result["test-cases"].length; i++) {
+                $(".test-cases > ul").append('\
+                    <li style="margin-bottom:10px;display:block;" id="case-' + result["test-cases"][i] + '" data-status="unsolved">\
+                                                Test Case ' + i + '. Status:<br />\
+                                                <span>unsolved</span>\
+                                            </li>\
+                ');
+            }
+
+        }
+        problemObj = result;
+        problemObj["problemId"] = result["id"];
+        problemObj["categoryId"] = categoryId;
+    });
+    ipcRenderer.on('case-evaluated', function(event, options, result) {
+        //
+    });
+
+    $(window).resize(function() {
+        $("#editor").height($(window).height() - 40);
+        $("#sidePanel").height($(window).height() - 40);
+    });
+
+    $(document).ready(function() {
+        initAce(); //Initializing Ace Editor
+         $("#sidepanel-section-wrapper").niceScroll({
+             "cursorwidth": "10px",
+             "cursorborderradius": "0px"
+         });
+        $("#editor").height($(window).height() - 40);
+        $("#sidePanel").height($(window).height() - 40);
+
+        $("#sidePanel").resizable({
+            containment: "parent",
+            handles: "e",
+            minWidth: 150,
+            maxWidth: 1000
+        });
+        $('.evaluating').hide();
+        $(".section-show-btn").click(function() {
+            $("#sidepanel-section-wrapper").attr("data-active-section", $(this).attr("data-show"));
+        });
+
+        //  $('.code_output_div').resizable();
+        ipcRenderer.on('recieve-code-output', function(event, data) {
+            console.log('output-from-code-recieved');
+            console.log(data);
+            var code_output = '';
+            if (!data.code_output.error) {
+                code_output = data.code_output.output;
+                $('.code_output_div').html(code_output);
+            } else {
+                code_output = data.code_output.error;
+                $('.code_output_div').html(code_output);
+            }
+            $('.time-required').html(data.code_output.time);
+
+
+        });
+
+
+
+
+        $(".back-btn").click(function() {
+            pager.loadPage("problem-list", $("#page-container"));
+        });
+        $(".show-problem-desc-btn").click(function() {
+            $elem = $("div[data-active-section]");
+            $elem.attr("data-active-section", "problem-desc");
+        });
+        $(".show-evaluation-btn").click(function() {
+            $elem = $("div[data-active-section]");
+            $elem.attr("data-active-section", "evaluation");
+        });
+        $(".show-input-output-btn").click(function() {
+            $elem = $("div[data-active-section]");
+            $elem.attr("data-active-section", "input-output");
+        });
+
+        $('.compile-code-btn').on('click', '', function() {
+            var $code = editor.getValue();
+            var lang = $('#lang-select-drop').val();
+            var input = $("#code-input").val();
+            var inputRadio = (input.trim() == "") ? false : true;
+            // console.log($code);
+            ipcRenderer.send('send-code', {
+                'code': $code,
+                'lang': lang,
+                'input': input,
+                'inputRadio': inputRadio
+            });
+        });
+
+        $('.submit-code-btn').on('click', '', function() {
+            var $code = editor.getValue();
+            var lang = $('#lang-select-drop').val();
+            var input = $("#code-input").val();
+            var input = $("#code-input").val();
+            const windowID = BrowserWindow.getFocusedWindow().id;
+        
+            let invisPath = 'file://' + path.join(__dirname, 'background/evaluator.html');
+            let win = new BrowserWindow({
+                width: 400,
+                height: 400,
+                show: true
+            });
+            win.loadURL(invisPath);
+            win.webContents.on('did-finish-load', function() {
+                win.webContents.send('make-submission', {
+                    'code': $code,
+                    'lang': lang,
+                    'input': input,
+                    'problemObj': problemObj
+                }, windowID);
+                console.log("Evaluation Service Started");
+            });
+            $('.evaluating').show();
+        });
+
+        ipcRenderer.on('made-submission', function(event, options, evaluation_result) {
+            $('.evaluating').hide();
+            console.log('Evaluation completed');
+            console.log(evaluation_result);
+            for (var testCase = 0; testCase < evaluation_result["case-results"].length; testCase++) {
+                console.log("#case-" + evaluation_result["case-results"][testCase]["testCase"] + " > span");
+                $("#case-" + evaluation_result["case-results"][testCase]["testCase"] + " > span").text(evaluation_result["case-results"][testCase]["status"]);
+                $("#case-" + evaluation_result["case-results"][testCase]["testCase"]).attr("data-status", evaluation_result["case-results"][testCase]["status"]);
+            }
+            var code_output = '';
+            // if(!evaluation_result.code_output.error){
+            //     code_output=data.code_output.output;
+            //     $('.code_output_div').html(code_output);
+            // }
+            // else{
+            //     code_output=data.code_output.error;
+            //     $('.code_output_div').html(code_output);
+            // }            
+
+
+        });
+    });
+</script>
